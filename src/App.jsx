@@ -1,7 +1,5 @@
-import './App.css'
-
 export default function App() {
   return (
-    <p>SpendScope</p>
+    <p className="font-bold text-blue-500">SpendScope</p>
   );
 }
