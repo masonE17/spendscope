@@ -1,6 +1,6 @@
 # SpendScope
 - Zoom in on your spending.
-- SpendScope is a full-stack expense tracker built with React and Vite. Add, categorize, and manage your expenses, then visualize your spending with interactive charts — all backed by Supabase.
+- SpendScope is a full-stack expense tracker built with React and Vite. Add, categorize, and manage your expenses, then visualize your spending with interactive charts, which is all backed by Supabase.
   
 ## Features
 - **Auth** — sign up or log in with secure authentication and row-level security
