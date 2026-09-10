@@ -16,5 +16,4 @@
 - [Tailwind CSS](https://tailwindcss.com/) — styling
 </br>
 </br>
-<img src="assets/SpendScope_Logo.png" width="300">
- 
+<img src="src/assets/SpendScope_Logo.png" width="300">
