@@ -4,6 +4,29 @@ import { faLock } from '@fortawesome/free-solid-svg-icons';
 import { faPiggyBank } from '@fortawesome/free-solid-svg-icons';
 import { faChartPie } from '@fortawesome/free-solid-svg-icons';
 
+function NavLink({ label }) {
+  return (
+    <div className="group flex flex-col justify-center items-center">
+      <button className="text-center group-hover:text-[#1e90ff]">{ label }</button>
+      <div className="w-full border-b-2 border-transparent group-hover:border-[#1e90ff] rounded-[5px]"></div>
+    </div>
+  );
+}
+
+function HomeDetails({ fWord, lWord, icon }) {
+  return (
+    <div className="border-solid border-gray-600 border w-40 p-4 bg-[rgb(5,21,49)] rounded-[5px] flex flex-col justify-center items-center transition-transform duration-300 ease-in-out hover:scale-105 hover:bg-[#1e90ff]">
+      <div className="rounded-[5px] w-full p-4 bg-[rgb(0,12,31)] flex flex-col justify-center items-center gap-2">
+        <FontAwesomeIcon icon={ icon } className="text-white text-[22px] bg-[#1e90ff] p-2 rounded-[5px]"/>
+        <div className="flex flex-row justify-center items-center gap-1">
+          <p className="text-[#1e90ff] text-[16px] font-bold">{ fWord }</p>
+          <p className="text-white text-[13px] text-center">{ lWord }</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function App() {
   return (
     <div className="w-full">
@@ -11,22 +34,10 @@ export default function App() {
         <div className="flex flex-row justify-evenly items-center max-w-350 m-auto py-4">
           <h1 className="text-[#1e90ff] font-bold text-[22px]">SpendScope</h1>
           <div className="flex flex-row justify-center gap-4 items-center text-gray-400 text-[14px]">
-            <div className="group flex flex-col justify-center items-center">
-              <button className="text-center group-hover:text-[#1e90ff]">Home</button>
-              <div className="w-full border-b-2 border-transparent group-hover:border-[#1e90ff] rounded-[5px]"></div>
-            </div>
-            <div className="group flex flex-col justify-center items-center">
-              <button className="text-center group-hover:text-[#1e90ff]">Explore</button>
-              <div className="w-full border-b-2 border-transparent group-hover:border-[#1e90ff] rounded-[5px]"></div>
-            </div>
-            <div className="group flex flex-col justify-center items-center">
-              <button className="text-center group-hover:text-[#1e90ff]">Pricing</button>
-              <div className="w-full border-b-2 border-transparent group-hover:border-[#1e90ff] rounded-[5px]"></div>
-            </div>
-            <div className="group flex flex-col justify-center items-center">
-              <button className="text-center group-hover:text-[#1e90ff]">Dashboard</button>
-              <div className="w-full border-b-2 border-transparent group-hover:border-[#1e90ff] rounded-[5px]"></div>
-            </div>
+            <NavLink label="Home" />
+            <NavLink label="Features" />
+            <NavLink label="Pricing" />
+            <NavLink label="Dashboard" />
           </div>
             <button className="bg-[#1e90ff] text-white p-2 text-[12px] rounded-[5px]">Get Started Free</button>
         </div>
@@ -52,26 +63,10 @@ export default function App() {
               <p className="text-gray-400 text-[12px]"><FontAwesomeIcon icon={faSquareCheck} className="text-green-500 mr-1" />Setup in Minutes</p>
             </div>
             <div className="flex flex-row justify-center items-center gap-6 mt-6">
-              <div className="border-solid border-gray-600 border w-40 p-4 bg-[rgb(5,21,49)] rounded-[5px] flex flex-col justify-center items-center transition-transform duration-300 ease-in-out hover:scale-105 hover:bg-[#1e90ff]">
-                <div className="rounded-[5px] w-full p-4 bg-[rgb(0,12,31)] flex flex-col justify-center items-center gap-2">
-                  <FontAwesomeIcon icon={faChartPie} className="text-white text-[22px] bg-[#1e90ff] p-2 rounded-[5px]"/>
-                  <p className="text-white text-[13px] text-center">Live Tracking</p>
-                </div>
-              </div>
-              <div className="border-solid border-gray-600 border w-40 p-4 bg-[rgb(5,21,49)] rounded-[5px] flex flex-col justify-center items-center transition-transform duration-300 ease-in-out hover:scale-105 hover:bg-[#1e90ff]">
-                <div className="rounded-[5px] w-full p-4 bg-[rgb(0,12,31)] flex flex-col justify-center items-center gap-2">
-                  <FontAwesomeIcon icon={faPiggyBank} className="text-white text-[22px] bg-[#1e90ff] p-2 rounded-[5px]"/>
-                  <p className="text-white text-[13px] text-center">Smart Budgets</p>
-                </div>
-              </div>
-              <div className="border-solid border-gray-600 border w-40 p-4 bg-[rgb(5,21,49)] rounded-[5px] flex flex-col justify-center items-center transition-transform duration-300 ease-in-out hover:scale-105 hover:bg-[#1e90ff]">
-                <div className="rounded-[5px] w-full p-4 bg-[rgb(0,12,31)] flex flex-col justify-center items-center gap-2">
-                  <FontAwesomeIcon icon={faLock} className="text-white text-[22px] bg-[#1e90ff] p-2 rounded-[5px]"/>
-                  <p className="text-white text-[13px] text-center">Secure Data</p>
-                </div>
-              </div>
+              <HomeDetails fWord="Live" lWord="Tracking" icon={faChartPie} />
+              <HomeDetails fWord="Smart" lWord="Budgets" icon={faPiggyBank} />
+              <HomeDetails fWord="Secure" lWord="Data" icon={faLock} />
             </div>
-
           </div>
         </div>
       </div>
