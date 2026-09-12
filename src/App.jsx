@@ -5,7 +5,6 @@ import { faPiggyBank } from '@fortawesome/free-solid-svg-icons';
 import { faChartPie } from '@fortawesome/free-solid-svg-icons';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { faLightbulb } from '@fortawesome/free-solid-svg-icons';
-import { faCircle } from '@fortawesome/free-solid-svg-icons';
 
 function NavLink({ label }) {
   return (
@@ -27,6 +26,12 @@ function HomeDetails({ fWord, lWord, icon }) {
         </div>
       </div>
     </div>
+  );
+}
+
+function FeatureDetails({ description }) {
+  return (
+    <p className="text-gray-400 text-[13px]">{ description }</p>
   );
 }
 
@@ -86,13 +91,13 @@ export default function App() {
             <div className="w-full">
               <p className="text-green-500 font-bold text-[18px]"><FontAwesomeIcon icon={faCheck} /> Strengths Identified</p>
               <div className="px-3 py-1 w-full">
-                <p className="text-gray-400 text-[13px]">We analyze your income and expenses to identify the strong areas in your financial management.</p>
+                <FeatureDetails description="We analyze your income and expenses to identify the strong areas in your financial management." />
               </div>
             </div>
             <div className="w-full">
               <p className="text-yellow-500 font-bold text-[18px]"><FontAwesomeIcon icon={faLightbulb} /> Improvements Suggested</p>
               <div className="px-3 py-1 w-full">
-                <p className="text-gray-400 text-[13px]">We provide actionable suggestions to help you optimize your spending habits.</p>
+                <FeatureDetails description="We provide actionable suggestions to help you optimize your spending habits." />
               </div>
             </div>
             <div className="border-solid border-b-2 border-gray-600 rounded-[5px] w-full"></div>
@@ -116,10 +121,10 @@ export default function App() {
               <div className="w-full">
                 <p className="text-white font-bold text-[18px]">Adpative Charts</p>
                 <div className="px-2 py-1 w-full">
-                  <p className="text-gray-400 text-[13px]">Personalized charts that adpat to your spending patterns and income sources.</p>
+                  <FeatureDetails description="Personalized charts that adpat to your spending patterns and income sources." />
                   <div className="border-solid border-b-2 border-gray-600 rounded-[5px] w-full my-2"></div>
-                  <p className="text-green-500 text-[13px] mb-2"><FontAwesomeIcon icon={faCircle} className="text-[8px]"/><b className="text-[14px]"> Category Breakdown:</b> Pie/donut chart showing exactly where your money goes each month (groceries, bills, entertainment, etc.)</p>
-                  <p className="text-green-500 text-[13px]"><FontAwesomeIcon icon={faCircle} className="text-[8px]"/><b className="text-[14px]"> Income vs. Expenses:</b> Line chart comparing your income and expenses over time, helping you identify trends and make informed financial decisions.</p>
+                  <p className="text-green-500 text-[13px] mb-2"><b className="text-[14px]">• Category Breakdown:</b> Pie/donut chart showing exactly where your money goes each month (groceries, bills, entertainment, etc.)</p>
+                  <p className="text-green-500 text-[13px]"><b className="text-[14px]">• Income vs. Expenses:</b> Line chart comparing your income and expenses over time, helping you identify trends and make informed financial decisions.</p>
                 </div>
               </div>
             </div>
