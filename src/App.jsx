@@ -5,6 +5,7 @@ import { faPiggyBank } from '@fortawesome/free-solid-svg-icons';
 import { faChartPie } from '@fortawesome/free-solid-svg-icons';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { faLightbulb } from '@fortawesome/free-solid-svg-icons';
+import { faX } from '@fortawesome/free-solid-svg-icons';
 
 function NavLink({ label }) {
   return (
@@ -39,6 +40,7 @@ export default function App() {
   return (
     <div className="w-full">
 
+      {/* Header Section */}
       <div className="w-full sticky top-0 bg-[rgb(0,12,31)] opacity-98 z-100">
         <div className="flex flex-row justify-evenly items-center max-w-350 m-auto py-4">
           <h1 className="text-[#1e90ff] font-bold text-[22px]">SpendScope</h1>
@@ -52,6 +54,7 @@ export default function App() {
         </div>
       </div>
 
+      {/* Home Section */}
       <div>
         <div className="w-full bg-[rgb(0,12,31)] pb-6">
           <div className="max-w-250 m-auto">
@@ -81,6 +84,7 @@ export default function App() {
         </div>
       </div>
 
+      {/* Features Section */}
       <div className="w-full bg-[rgb(1,16,39)] py-6">
         <div className="flex flex-col justify-center items-center gap-3">
           <p className="text-white text-[26px] text-center font-bold">See What Unique Features Set Us Apart</p>
@@ -131,6 +135,39 @@ export default function App() {
           </div>
         </div>
       </div>
+
+      {/* Pricing Section */}
+      <div className="w-full bg-[rgb(0,12,31)] py-6">
+        <div className="flex flex-col justify-center items-center gap-3">
+          <p className="text-white text-[26px] text-center font-bold">Choose Your Plan</p>
+          <p className="text-gray-400 text-[14px] text-center mb-8">Start free and upgrade as you're ready to accelerate your financial journey.</p>
+          <div className="max-w-200 m-auto flex flex-row justify-center items-center gap-28 p-4">
+            <div className="w-70 h-70 border-solid border-gray-600 border p-4 bg-[rgb(5,21,49)] rounded-[5px] flex flex-col justify-center items-center gap-3">
+              <p className="text-white font-bold text-[18px]">Free</p>
+              <p className="text-gray-400 text-[12px]"><b className="text-white text-[20px]">$0</b>/forever</p>
+              <p className="text-gray-400 text-[14px]">Basic expense tracking</p>
+              <div className="w-full flex flex-col justify-center items-start gap-1">
+                <p className="text-white text-[14px]"><FontAwesomeIcon icon={faCheck} className="text-green-500" /> Manual Creation</p>
+                <p className="text-white text-[14px]"> <FontAwesomeIcon icon={faCheck} className="text-green-500" /> Unlimited Plans</p>
+                <p className="text-white text-[14px]"><FontAwesomeIcon icon={faX} className="text-red-500" /> No Premium Upcoming Features</p>
+              </div>
+              <button className="bg-[#1e90ff] text-white p-2 text-[12px] rounded-[5px] hover:bg-[#0d7ae9] hover:cursor-pointer">Get Started Free</button>
+            </div>
+            <div className="w-70 h-70 border-solid border-[#1e90ff] shadow-[0_0_6px_#1e90ff] border p-4 bg-[rgb(5,21,49)] rounded-[5px] flex flex-col justify-center items-center gap-3">
+              <p className="text-white font-bold text-[18px]">Pro</p>
+              <p className="text-gray-400 text-[12px]"><b className="text-white text-[20px]">$2.99</b>/month</p>
+              <p className="text-gray-400 text-[14px]">Advanced expense tracking</p>
+              <div className="w-full flex flex-col justify-center items-start gap-1">
+                <p className="text-white text-[14px]"><FontAwesomeIcon icon={faCheck} className="text-green-500" /> Everything in Free Included</p>
+                <p className="text-white text-[14px]"><FontAwesomeIcon icon={faCheck} className="text-green-500" /> AI assistance</p>
+                <p className="text-white text-[14px]"><FontAwesomeIcon icon={faCheck} className="text-green-500" /> Priority Support</p>
+              </div>
+              <p className="text-[#1e90ff] text-[18px] font-bold">COMING SOON</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
 
     </div>
   );
