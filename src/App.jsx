@@ -18,13 +18,10 @@ function NavLink({ label }) {
 
 function HomeDetails({ fWord, lWord, icon }) {
   return (
-    <div className="border-solid border-gray-600 border w-40 p-4 bg-[rgb(5,21,49)] rounded-[5px] flex flex-col justify-center items-center transition-transform duration-300 ease-in-out hover:scale-105 hover:bg-[#1e90ff]">
+    <div className="border-solid border-gray-600 border w-45 p-4 bg-[rgb(5,21,49)] rounded-[5px] flex flex-col justify-center items-center transition-transform duration-300 ease-in-out hover:scale-105 hover:bg-[#1e90ff]">
       <div className="rounded-[5px] w-full p-4 bg-[rgb(0,12,31)] flex flex-col justify-center items-center gap-2">
         <FontAwesomeIcon icon={ icon } className="text-white text-[22px] bg-[#1e90ff] p-2 rounded-[5px]"/>
-        <div className="flex flex-row justify-center items-center gap-1">
-          <p className="text-[#1e90ff] text-[16px] font-bold">{ fWord }</p>
-          <p className="text-white text-[13px] text-center">{ lWord }</p>
-        </div>
+        <p className="text-white text-[13px] text-center"><b className="text-[#1e90ff] text-[16px] font-bold">{ fWord } </b>{ lWord }</p>
       </div>
     </div>
   );
