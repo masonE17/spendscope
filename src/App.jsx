@@ -3,6 +3,9 @@ import { faSquareCheck } from '@fortawesome/free-solid-svg-icons';
 import { faLock } from '@fortawesome/free-solid-svg-icons';
 import { faPiggyBank } from '@fortawesome/free-solid-svg-icons';
 import { faChartPie } from '@fortawesome/free-solid-svg-icons';
+import { faCheck } from '@fortawesome/free-solid-svg-icons';
+import { faLightbulb } from '@fortawesome/free-solid-svg-icons';
+import { faCircle } from '@fortawesome/free-solid-svg-icons';
 
 function NavLink({ label }) {
   return (
@@ -30,7 +33,8 @@ function HomeDetails({ fWord, lWord, icon }) {
 export default function App() {
   return (
     <div className="w-full">
-      <div className="w-full sticky top-0 bg-[rgb(0,12,31)] opacity-95">
+
+      <div className="w-full sticky top-0 bg-[rgb(0,12,31)] opacity-98 z-100">
         <div className="flex flex-row justify-evenly items-center max-w-350 m-auto py-4">
           <h1 className="text-[#1e90ff] font-bold text-[22px]">SpendScope</h1>
           <div className="flex flex-row justify-center gap-4 items-center text-gray-400 text-[14px]">
@@ -39,9 +43,10 @@ export default function App() {
             <NavLink label="Pricing" />
             <NavLink label="Dashboard" />
           </div>
-            <button className="bg-[#1e90ff] text-white p-2 text-[12px] rounded-[5px]">Get Started Free</button>
+            <button className="bg-[#1e90ff] text-white p-2 text-[12px] rounded-[5px] hover:bg-[#0d7ae9] hover:cursor-pointer">Get Started Free</button>
         </div>
       </div>
+
       <div>
         <div className="w-full bg-[rgb(0,12,31)] pb-6">
           <div className="max-w-250 m-auto">
@@ -53,8 +58,8 @@ export default function App() {
               </div>
               <p className="text-white text-[42px] font-bold -mt-4">Ever Need</p>
               <div className="flex flex-col justify-center items-center gap-7">
-                <p className="text-gray-400 text-[15px] text-center mt-6">Build optimal expense management strategies with our <br />intuitive platform.</p>
-                <button className="bg-[#1e90ff] text-white px-4 py-3 text-[16px] rounded-[5px] animate-pulse">Get Started Free</button>
+                <p className="text-gray-400 text-[14px] text-center mt-6">Build optimal expense management strategies with our <br />intuitive platform.</p>
+                <button className="bg-[#1e90ff] text-white px-4 py-3 text-[16px] rounded-[5px] animate-pulse hover:bg-[#0d7ae9] hover:cursor-pointer">Get Started Free</button>
               </div>
             </div>
             <div className="flex flex-row justify-center items-center gap-4 mt-3">
@@ -70,6 +75,58 @@ export default function App() {
           </div>
         </div>
       </div>
+
+      <div className="w-full bg-[rgb(1,16,39)] py-6">
+        <div className="flex flex-col justify-center items-center gap-3">
+          <p className="text-white text-[26px] text-center font-bold">See What Unique Features Set Us Apart</p>
+          <p className="text-gray-400 text-[14px] text-center mb-8">Discover the innovative tools and features that sets our expense tracker apart from the rest.</p>
+        </div>
+        <div className="max-w-350 border-solid m-auto flex flex-row justify-center items-center gap-4 p-4">
+          <div className="max-w-90 h-full border-solid border-gray-600 border p-4 bg-[rgb(5,21,49)] rounded-[5px] flex flex-col justify-center items-center gap-3">
+            <div className="w-full">
+              <p className="text-green-500 font-bold text-[18px]"><FontAwesomeIcon icon={faCheck} /> Strengths Identified</p>
+              <div className="px-3 py-1 w-full">
+                <p className="text-gray-400 text-[13px]">We analyze your income and expenses to identify the strong areas in your financial management.</p>
+              </div>
+            </div>
+            <div className="w-full">
+              <p className="text-yellow-500 font-bold text-[18px]"><FontAwesomeIcon icon={faLightbulb} /> Improvements Suggested</p>
+              <div className="px-3 py-1 w-full">
+                <p className="text-gray-400 text-[13px]">We provide actionable suggestions to help you optimize your spending habits.</p>
+              </div>
+            </div>
+            <div className="border-solid border-b-2 border-gray-600 rounded-[5px] w-full"></div>
+            <div className="w-full">
+              <div className="flex flex-row justify-between items-center w-full text-gray-400 text-[13px] px-3 py-1">
+                <p>Overall Performance</p>
+                <p>94%</p>
+              </div>
+              <div className="w-full px-6 py-1">
+                <div className="w-full h-2 border-solid border-gray-600 border rounded-[5px]">
+                  <div className="w-[94%] h-full bg-green-500 rounded-[5px]"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="max-w-120">
+            <img src="src/assets/SpendScope_Logo.png" alt="SpendScope Logo" className="w-full rounded-full" />
+          </div>
+          <div className="max-w-90 h-full flex flex-col justify-center items-center">
+            <div className="border-solid border-gray-600 border p-4 bg-[rgb(5,21,49)] rounded-[5px] flex flex-col justify-center items-center">
+              <div className="w-full">
+                <p className="text-white font-bold text-[18px]">Adpative Charts</p>
+                <div className="px-2 py-1 w-full">
+                  <p className="text-gray-400 text-[13px]">Personalized charts that adpat to your spending patterns and income sources.</p>
+                  <div className="border-solid border-b-2 border-gray-600 rounded-[5px] w-full my-2"></div>
+                  <p className="text-green-500 text-[13px] mb-2"><FontAwesomeIcon icon={faCircle} className="text-[8px]"/><b className="text-[14px]"> Category Breakdown:</b> Pie/donut chart showing exactly where your money goes each month (groceries, bills, entertainment, etc.)</p>
+                  <p className="text-green-500 text-[13px]"><FontAwesomeIcon icon={faCircle} className="text-[8px]"/><b className="text-[14px]"> Income vs. Expenses:</b> Line chart comparing your income and expenses over time, helping you identify trends and make informed financial decisions.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
   );
 }
