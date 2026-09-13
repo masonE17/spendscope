@@ -33,6 +33,24 @@ function FeatureDetails({ description }) {
   );
 }
 
+function PricingDetails({ plan, price, longevity, description, includedFeatures, unincludedFeatures }) {
+  return (
+    <>
+      <p className="text-white font-bold text-[18px]">{ plan }</p>
+      <p className="text-gray-400 text-[12px]"><b className="text-white text-[20px]">{ price }</b>/{ longevity }</p>
+      <p className="text-gray-400 text-[14px]">{ description }</p>
+      <div className="w-full flex flex-col justify-center items-start gap-1">
+        {includedFeatures.map((feature, index) => (
+          <p className="text-white text-[14px]" key={index}><FontAwesomeIcon icon={faCheck} className="text-green-500" /> {feature}</p>
+        ))}
+        {unincludedFeatures.map((feature, index) => (
+          <p className="text-white text-[14px]" key={index}><FontAwesomeIcon icon={faX} className="text-red-500" /> {feature}</p>
+        ))}
+      </div>
+    </>
+  );
+}
+
 export default function App() {
   return (
     <div className="w-full">
@@ -140,25 +158,11 @@ export default function App() {
           <p className="text-gray-400 text-[14px] text-center mb-8">Start free and upgrade as you're ready to accelerate your financial journey.</p>
           <div className="max-w-200 m-auto flex flex-row justify-center items-center gap-28 p-4">
             <div className="w-70 h-70 border-solid border-gray-600 border p-4 bg-[rgb(5,21,49)] rounded-[5px] flex flex-col justify-center items-center gap-3">
-              <p className="text-white font-bold text-[18px]">Free</p>
-              <p className="text-gray-400 text-[12px]"><b className="text-white text-[20px]">$0</b>/forever</p>
-              <p className="text-gray-400 text-[14px]">Basic expense tracking</p>
-              <div className="w-full flex flex-col justify-center items-start gap-1">
-                <p className="text-white text-[14px]"><FontAwesomeIcon icon={faCheck} className="text-green-500" /> Manual Creation</p>
-                <p className="text-white text-[14px]"> <FontAwesomeIcon icon={faCheck} className="text-green-500" /> Unlimited Plans</p>
-                <p className="text-white text-[14px]"><FontAwesomeIcon icon={faX} className="text-red-500" /> No Premium Upcoming Features</p>
-              </div>
+              <PricingDetails plan="Free" price="$0" longevity="forever" description="Basic expense tracking" includedFeatures={["Manual Creation", "Unlimited Plans"]} unincludedFeatures={["No Premium Upcoming Features"]} />
               <button className="bg-[#1e90ff] text-white p-2 text-[12px] rounded-[5px] hover:bg-[#0d7ae9] hover:cursor-pointer">Get Started Free</button>
             </div>
             <div className="w-70 h-70 border-solid border-[#1e90ff] shadow-[0_0_6px_#1e90ff] border p-4 bg-[rgb(5,21,49)] rounded-[5px] flex flex-col justify-center items-center gap-3">
-              <p className="text-white font-bold text-[18px]">Pro</p>
-              <p className="text-gray-400 text-[12px]"><b className="text-white text-[20px]">$2.99</b>/month</p>
-              <p className="text-gray-400 text-[14px]">Advanced expense tracking</p>
-              <div className="w-full flex flex-col justify-center items-start gap-1">
-                <p className="text-white text-[14px]"><FontAwesomeIcon icon={faCheck} className="text-green-500" /> Everything in Free Included</p>
-                <p className="text-white text-[14px]"><FontAwesomeIcon icon={faCheck} className="text-green-500" /> AI assistance</p>
-                <p className="text-white text-[14px]"><FontAwesomeIcon icon={faCheck} className="text-green-500" /> Priority Support</p>
-              </div>
+              <PricingDetails plan="Pro" price="$2.99" longevity="month" description="Advanced expense tracking" includedFeatures={["Everything in Free Included", "AI assistance", "Priority Support"]} unincludedFeatures={[]} />
               <p className="text-[#1e90ff] text-[18px] font-bold">COMING SOON</p>
             </div>
           </div>
