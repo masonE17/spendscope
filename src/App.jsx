@@ -6,6 +6,8 @@ import { faChartPie } from '@fortawesome/free-solid-svg-icons';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { faLightbulb } from '@fortawesome/free-solid-svg-icons';
 import { faX } from '@fortawesome/free-solid-svg-icons';
+import { faLinkedin } from '@fortawesome/free-brands-svg-icons';
+import { faGithub } from '@fortawesome/free-brands-svg-icons';
 
 function NavLink({ label }) {
   return (
@@ -71,7 +73,7 @@ export default function App() {
 
       {/* Home Section */}
       <div>
-        <div className="w-full bg-[rgb(0,12,31)] pb-6">
+        <div className="w-full bg-[rgb(0,12,31)] pb-10">
           <div className="max-w-250 m-auto">
             <div className="max-w-150 m-auto py-5 flex flex-col justify-center items-center">
               <p className="text-white text-[42px] font-bold">The Only Free</p>
@@ -100,7 +102,7 @@ export default function App() {
       </div>
 
       {/* Features Section */}
-      <div className="w-full bg-[rgb(1,16,39)] py-6">
+      <div className="w-full bg-[rgb(1,16,39)] py-10">
         <div className="flex flex-col justify-center items-center gap-3">
           <p className="text-white text-[26px] text-center font-bold">See What Unique Features Set Us Apart</p>
           <p className="text-gray-400 text-[14px] text-center mb-8">Discover the innovative tools and features that sets our expense tracker apart from the rest.</p>
@@ -152,7 +154,7 @@ export default function App() {
       </div>
 
       {/* Pricing Section */}
-      <div className="w-full bg-[rgb(0,12,31)] py-6">
+      <div className="w-full bg-[rgb(0,12,31)] py-10">
         <div className="flex flex-col justify-center items-center gap-3">
           <p className="text-white text-[26px] text-center font-bold">Choose Your Plan</p>
           <p className="text-gray-400 text-[14px] text-center mb-8">Start free and upgrade as you're ready to accelerate your financial journey.</p>
@@ -169,6 +171,26 @@ export default function App() {
         </div>
       </div>
 
+      {/* Footer Section */}
+      <div className="w-full bg-[rgb(1,16,39)] py-10">
+        <div className="flex flex-col justify-center items-center gap-3">
+          <p className="text-white text-[26px] text-center font-bold">Your financial future is your most valuable asset</p>
+          <p className="text-gray-400 text-[14px] text-center mb-8">Start your journey to financial freedom today.</p>
+          <div className="w-full max-w-200 m-auto">
+            <div className="flex flex-row justify-center items-center gap-4 mb-8">
+              <button className="bg-[#1e90ff] text-white p-2 text-[12px] rounded-[5px] hover:bg-[#0d7ae9] hover:cursor-pointer">Create Your Plan Now</button>
+              <button className="bg-[rgb(5,21,49)] text-white p-2 text-[12px] rounded-[5px] border-solid border-gray-400 border hover:bg-[#0d7ae9] hover:cursor-pointer hover:border-[#0d7ae9]">View DashBoard</button>
+            </div>
+            <div className="w-full border-b-solid border-white border-2 rounded-[5px] mb-8"></div>
+            <p className="text-gray-400 text-[16px] text-center mb-3">Built by an aspiring developer who understands the importance of financial literacy.</p>
+            <p className="text-gray-400 text-[14px] text-center">Follow me on my socials for updates and tips!</p>
+            <div className="flex flex-row justify-center items-center gap-4 mt-4 mb-10">
+              <FontAwesomeIcon icon={faLinkedin} className="text-white text-[28px]" />
+              <FontAwesomeIcon icon={faGithub} className="text-white text-[28px]" />
+            </div>
+          </div>
+        </div>
+      </div>
 
     </div>
   );
