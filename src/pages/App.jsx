@@ -8,15 +8,7 @@ import { faLightbulb } from '@fortawesome/free-solid-svg-icons';
 import { faX } from '@fortawesome/free-solid-svg-icons';
 import { faLinkedin } from '@fortawesome/free-brands-svg-icons';
 import { faGithub } from '@fortawesome/free-brands-svg-icons';
-
-function NavLink({ label }) {
-  return (
-    <div className="group flex flex-col justify-center items-center">
-      <button className="text-center group-hover:text-[#1e90ff]">{ label }</button>
-      <div className="w-full border-b-2 border-transparent group-hover:border-[#1e90ff] rounded-[5px]"></div>
-    </div>
-  );
-}
+import { Link } from 'react-router-dom';
 
 function HomeDetails({ fWord, lWord, icon }) {
   return (
@@ -62,12 +54,28 @@ export default function App() {
         <div className="flex flex-row justify-evenly items-center max-w-350 m-auto py-4">
           <h1 className="text-[#1e90ff] font-bold text-[22px]">SpendScope</h1>
           <div className="flex flex-row justify-center gap-4 items-center text-gray-400 text-[14px]">
-            <NavLink label="Home" />
-            <NavLink label="Features" />
-            <NavLink label="Pricing" />
-            <NavLink label="Dashboard" />
+            <div className="group flex flex-col justify-center items-center">
+              <button className="text-center group-hover:text-[#1e90ff]">Home</button>
+              <div className="w-full border-b-2 border-transparent group-hover:border-[#1e90ff] rounded-[5px]"></div>
+            </div>
+            <div className="group flex flex-col justify-center items-center">
+              <button className="text-center group-hover:text-[#1e90ff]">Features</button>
+              <div className="w-full border-b-2 border-transparent group-hover:border-[#1e90ff] rounded-[5px]"></div>
+            </div>
+            <div className="group flex flex-col justify-center items-center">
+              <button className="text-center group-hover:text-[#1e90ff]">Pricing</button>
+              <div className="w-full border-b-2 border-transparent group-hover:border-[#1e90ff] rounded-[5px]"></div>
+            </div>
+            <div className="group flex flex-col justify-center items-center">
+              <Link to="/dashboard">
+                <button className="text-center group-hover:text-[#1e90ff]">Dashboard</button>
+              </Link>
+              <div className="w-full border-b-2 border-transparent group-hover:border-[#1e90ff] rounded-[5px]"></div>
+            </div>
           </div>
-            <button className="bg-[#1e90ff] text-white p-2 text-[12px] rounded-[5px] hover:bg-[#0d7ae9] hover:cursor-pointer">Get Started Free</button>
+            <Link to="/join">
+              <button className="bg-[#1e90ff] text-white p-2 text-[12px] rounded-[5px] hover:bg-[#0d7ae9] hover:cursor-pointer">Get Started Free</button>
+            </Link>
         </div>
       </div>
 
@@ -84,7 +92,9 @@ export default function App() {
               <p className="text-white text-[42px] font-bold -mt-4">Ever Need</p>
               <div className="flex flex-col justify-center items-center gap-7">
                 <p className="text-gray-400 text-[14px] text-center mt-6">Build optimal expense management strategies with our <br />intuitive platform.</p>
-                <button className="bg-[#1e90ff] text-white px-4 py-3 text-[16px] rounded-[5px] animate-pulse hover:bg-[#0d7ae9] hover:cursor-pointer">Get Started Free</button>
+                <Link to="/join">
+                  <button className="bg-[#1e90ff] text-white px-4 py-3 text-[16px] rounded-[5px] animate-pulse hover:bg-[#0d7ae9] hover:cursor-pointer">Get Started Free</button>
+                </Link>
               </div>
             </div>
             <div className="flex flex-row justify-center items-center gap-4 mt-3">
@@ -161,7 +171,9 @@ export default function App() {
           <div className="max-w-200 m-auto flex flex-row justify-center items-center gap-28 p-4">
             <div className="w-70 h-70 border-solid border-gray-600 border p-4 bg-[rgb(5,21,49)] rounded-[5px] flex flex-col justify-center items-center gap-3">
               <PricingDetails plan="Free" price="$0" longevity="forever" description="Basic expense tracking" includedFeatures={["Manual Creation", "Unlimited Plans"]} unincludedFeatures={["No Premium Upcoming Features"]} />
-              <button className="bg-[#1e90ff] text-white p-2 text-[12px] rounded-[5px] hover:bg-[#0d7ae9] hover:cursor-pointer">Get Started Free</button>
+              <Link to="/join">
+                <button className="bg-[#1e90ff] text-white p-2 text-[12px] rounded-[5px] hover:bg-[#0d7ae9] hover:cursor-pointer">Get Started Free</button>
+              </Link>
             </div>
             <div className="w-70 h-70 border-solid border-[#1e90ff] shadow-[0_0_6px_#1e90ff] border p-4 bg-[rgb(5,21,49)] rounded-[5px] flex flex-col justify-center items-center gap-3">
               <PricingDetails plan="Pro" price="$2.99" longevity="month" description="Advanced expense tracking" includedFeatures={["Everything in Free Included", "AI assistance", "Priority Support"]} unincludedFeatures={[]} />
@@ -178,8 +190,12 @@ export default function App() {
           <p className="text-gray-400 text-[14px] text-center mb-8">Start your journey to financial freedom today.</p>
           <div className="w-full max-w-200 m-auto">
             <div className="flex flex-row justify-center items-center gap-4 mb-8">
-              <button className="bg-[#1e90ff] text-white p-2 text-[12px] rounded-[5px] hover:bg-[#0d7ae9] hover:cursor-pointer">Create Your Plan Now</button>
-              <button className="bg-[rgb(5,21,49)] text-white p-2 text-[12px] rounded-[5px] border-solid border-gray-400 border hover:bg-[#0d7ae9] hover:cursor-pointer hover:border-[#0d7ae9]">View DashBoard</button>
+              <Link to="/join">
+                <button className="bg-[#1e90ff] text-white p-2 text-[12px] rounded-[5px] hover:bg-[#0d7ae9] hover:cursor-pointer">Get Started Free</button>
+              </Link>
+              <Link to="/dashboard">
+                <button className="bg-[rgb(5,21,49)] text-white p-2 text-[12px] rounded-[5px] border-solid border-gray-400 border hover:bg-[#0d7ae9] hover:cursor-pointer hover:border-[#0d7ae9]">View DashBoard</button>
+              </Link>
             </div>
             <div className="w-full border-b-solid border-white border-2 rounded-[5px] mb-8"></div>
             <p className="text-gray-400 text-[16px] text-center mb-3">Built by an aspiring developer who understands the importance of financial literacy.</p>
