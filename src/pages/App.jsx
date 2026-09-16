@@ -194,7 +194,7 @@ export default function App() {
                 <button className="bg-[#1e90ff] text-white p-2 text-[12px] rounded-[5px] hover:bg-[#0d7ae9] hover:cursor-pointer">Get Started Free</button>
               </Link>
               <Link to="/dashboard">
-                <button className="bg-[rgb(5,21,49)] text-white p-2 text-[12px] rounded-[5px] border-solid border-gray-400 border hover:bg-[#0d7ae9] hover:cursor-pointer hover:border-[#0d7ae9]">View DashBoard</button>
+                <button className="bg-[rgb(5,21,49)] text-gray-400 p-2 text-[12px] rounded-[5px] border-solid border-gray-400 border hover:text-[#1e90ff] hover:cursor-pointer hover:border-[#0d7ae9]">View DashBoard</button>
               </Link>
             </div>
             <div className="w-full border-b-solid border-white border-2 rounded-[5px] mb-8"></div>
