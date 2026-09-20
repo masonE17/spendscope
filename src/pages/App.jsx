@@ -45,6 +45,9 @@ function PricingDetails({ plan, price, longevity, description, includedFeatures,
   );
 }
 
+const scrollTo = (id) =>
+  document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+
 export default function App() {
   return (
     <div className="w-full">
@@ -55,20 +58,20 @@ export default function App() {
           <h1 className="text-[#1e90ff] font-bold text-[22px]">SpendScope</h1>
           <div className="flex flex-row justify-center gap-4 items-center text-gray-400 text-[14px]">
             <div className="group flex flex-col justify-center items-center">
-              <button className="text-center group-hover:text-[#1e90ff]">Home</button>
+              <button onClick={() => scrollTo('home')} className="text-center group-hover:text-white hover:cursor-pointer">Home</button>
               <div className="w-full border-b-2 border-transparent group-hover:border-[#1e90ff] rounded-[5px]"></div>
             </div>
             <div className="group flex flex-col justify-center items-center">
-              <button className="text-center group-hover:text-[#1e90ff]">Features</button>
+              <button onClick={() => scrollTo('features')} className="text-center group-hover:text-white hover:cursor-pointer">Features</button>
               <div className="w-full border-b-2 border-transparent group-hover:border-[#1e90ff] rounded-[5px]"></div>
             </div>
             <div className="group flex flex-col justify-center items-center">
-              <button className="text-center group-hover:text-[#1e90ff]">Pricing</button>
+              <button onClick={() => scrollTo('pricing')} className="text-center group-hover:text-white hover:cursor-pointer">Pricing</button>
               <div className="w-full border-b-2 border-transparent group-hover:border-[#1e90ff] rounded-[5px]"></div>
             </div>
             <div className="group flex flex-col justify-center items-center">
               <Link to="/dashboard">
-                <button className="text-center group-hover:text-[#1e90ff]">Dashboard</button>
+                <button className="text-center group-hover:text-white">Dashboard</button>
               </Link>
               <div className="w-full border-b-2 border-transparent group-hover:border-[#1e90ff] rounded-[5px]"></div>
             </div>
@@ -80,7 +83,7 @@ export default function App() {
       </div>
 
       {/* Home Section */}
-      <div>
+      <div id="home" className="scroll-mt-16">
         <div className="w-full bg-[rgb(0,12,31)] pb-10">
           <div className="max-w-250 m-auto">
             <div className="max-w-150 m-auto py-5 flex flex-col justify-center items-center">
@@ -112,7 +115,7 @@ export default function App() {
       </div>
 
       {/* Features Section */}
-      <div className="w-full bg-[rgb(1,16,39)] py-10">
+      <div id="features" className="scroll-mt-16 w-full bg-[rgb(1,16,39)] py-10">
         <div className="flex flex-col justify-center items-center gap-3">
           <p className="text-white text-[26px] text-center font-bold">See What Unique Features Set Us Apart</p>
           <p className="text-gray-400 text-[14px] text-center mb-8">Discover the innovative tools and features that sets our expense tracker apart from the rest.</p>
@@ -164,7 +167,7 @@ export default function App() {
       </div>
 
       {/* Pricing Section */}
-      <div className="w-full bg-[rgb(0,12,31)] py-10">
+      <div id="pricing" className="scroll-mt-16 w-full bg-[rgb(0,12,31)] py-10">
         <div className="flex flex-col justify-center items-center gap-3">
           <p className="text-white text-[26px] text-center font-bold">Choose Your Plan</p>
           <p className="text-gray-400 text-[14px] text-center mb-8">Start free and upgrade as you're ready to accelerate your financial journey.</p>
