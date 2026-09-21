@@ -19,6 +19,11 @@ export default function Dashboard() {
         month: 'long',
         year: 'numeric'
     });
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
+
     return (
         <div className="w-full mb-15">
 
@@ -43,6 +48,10 @@ export default function Dashboard() {
                         <p className="text-white">User ICON</p>
                     </div>
                 </div>
+            </div>
+
+            {/* Page Content */}
+            <div className="w-full">
 
                 {/* Sub Header Section */}
                 <div className="w-full max-w-300 m-auto">

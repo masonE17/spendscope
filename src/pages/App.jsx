@@ -9,6 +9,7 @@ import { faX } from '@fortawesome/free-solid-svg-icons';
 import { faLinkedin } from '@fortawesome/free-brands-svg-icons';
 import { faGithub } from '@fortawesome/free-brands-svg-icons';
 import { Link } from 'react-router-dom';
+import { useEffect } from 'react';
 
 function HomeDetails({ fWord, lWord, icon }) {
   return (
@@ -45,10 +46,14 @@ function PricingDetails({ plan, price, longevity, description, includedFeatures,
   );
 }
 
-const scrollTo = (id) =>
-  document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+const scrollTo = (id) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
 
 export default function App() {
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <div className="w-full">
 

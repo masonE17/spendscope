@@ -2,10 +2,15 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLock } from "@fortawesome/free-solid-svg-icons";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function Join() {
     const [signIn, setSignIn] = useState(true);
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
+    
     return (
         <div className="bg-[rgb(0,12,31)] w-full min-h-screen flex items-center justify-center p-4">
             <div className="w-full max-w-130 mx-auto border-solid border-gray-600 border rounded-md bg-[rgb(1,16,39)] flex flex-col items-center justify-center">
