@@ -59,9 +59,9 @@ export default function App() {
 
       {/* Header Section */}
       <div className="w-full sticky top-0 bg-[rgb(0,12,31)] opacity-98 z-100">
-        <div className="flex flex-row justify-evenly items-center max-w-350 m-auto py-4">
-          <h1 className="text-[#1e90ff] font-bold text-[22px]">SpendScope</h1>
-          <div className="flex flex-row justify-center gap-4 items-center text-gray-400 text-[14px]">
+        <div className="grid grid-cols-3 items-center max-w-300 m-auto py-4">
+          <h1 className="text-[#1e90ff] font-bold text-[22px] justify-self-start">SpendScope</h1>
+          <div className="flex flex-row justify-center gap-4 items-center text-gray-400 text-[14px] justify-self-center">
             <div className="group flex flex-col justify-center items-center">
               <button onClick={() => scrollTo('home')} className="text-center group-hover:text-white hover:cursor-pointer">Home</button>
               <div className="w-full border-b-2 border-transparent group-hover:border-[#1e90ff] rounded-[5px]"></div>
@@ -81,9 +81,9 @@ export default function App() {
               <div className="w-full border-b-2 border-transparent group-hover:border-[#1e90ff] rounded-[5px]"></div>
             </div>
           </div>
-            <Link to="/join">
-              <button className="bg-[#1e90ff] text-white p-2 text-[12px] rounded-[5px] hover:bg-[#0d7ae9] hover:cursor-pointer">Get Started Free</button>
-            </Link>
+          <Link to="/join" className="justify-self-end">
+            <button className="bg-[#1e90ff] text-white p-2 text-[12px] rounded-[5px] hover:bg-[#0d7ae9] hover:cursor-pointer">Get Started Free</button>
+          </Link>
         </div>
       </div>
 

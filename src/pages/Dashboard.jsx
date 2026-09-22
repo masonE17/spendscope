@@ -29,9 +29,9 @@ export default function Dashboard() {
 
             {/* Header Section */}
             <div className="w-full sticky top-0 bg-[rgb(0,12,31)] opacity-98 z-100">
-                <div className="flex flex-row justify-evenly items-center max-w-350 m-auto py-4">
-                    <h1 className="text-[#1e90ff] font-bold text-[22px]">SpendScope</h1>
-                    <div className="flex flex-row justify-center gap-4 items-center text-gray-400 text-[14px]">
+                <div className="grid grid-cols-3 items-center max-w-300 m-auto py-4 px-10">
+                    <h1 className="text-[#1e90ff] font-bold text-[22px] justify-self-start">SpendScope</h1>
+                    <div className="flex flex-row justify-center gap-4 items-center text-gray-400 text-[14px] justify-self-center">
                         <div className="group flex flex-col justify-center items-center">
                             <Link to="/">
                                 <button className="text-center group-hover:text-white">Home</button>
@@ -42,8 +42,14 @@ export default function Dashboard() {
                             <p className="text-center text-white">Dashboard</p>
                             <div className="w-full border-b-2 border-[#1e90ff] rounded-[5px]"></div>
                         </div>
+                        <div className="group flex flex-col justify-center items-center">
+                            <Link to="/add-expense">
+                                <button className="text-center group-hover:text-white">Add Expense</button>
+                            </Link>
+                            <div className="w-full border-b-2 border-transparent group-hover:border-[#1e90ff] rounded-[5px]"></div>
+                        </div>
                     </div>
-                    <div className="flex flex-row justify-center items-center gap-4">
+                    <div className="flex flex-row justify-center items-center gap-4 justify-self-end">
                         <p className="text-white">{ formatter.format(date) }</p>
                         <p className="text-white">User ICON</p>
                     </div>
@@ -55,14 +61,16 @@ export default function Dashboard() {
 
                 {/* Sub Header Section */}
                 <div className="w-full max-w-300 m-auto">
-                    <div className="flex flex-row justify-between items-center py-2 px-2">
+                    <div className="flex flex-row justify-between items-center p-2">
                         <div className="flex flex-col justify-center items-start">
                             <p className="text-white text-[30px] font-bold">Dashboard</p>
                             <p className="text-gray-400 text-[15px]">Welcome back USER! Here's where you can manage your finances.</p>
                         </div>
                         <div className="flex flex-row justify-center items-center gap-4">
                             <button className="text-gray-400 px-3 py-2 text-[12px] rounded-[5px] border-solid border-gray-400 border hover:text-[#1e90ff] hover:cursor-pointer hover:border-[#0d7ae9]">Edit Budget</button>
-                            <button className="bg-[#1e90ff] text-white px-3 py-2 text-[12px] rounded-[5px] hover:bg-[#0d7ae9] hover:cursor-pointer"><FontAwesomeIcon icon={faPlus} /> Add Expense</button>
+                            <Link to="/add-expense">
+                                <button className="bg-[#1e90ff] text-white px-3 py-2 text-[12px] rounded-[5px] hover:bg-[#0d7ae9] hover:cursor-pointer"><FontAwesomeIcon icon={faPlus} /> Add Expense</button>
+                            </Link>
                         </div>
                     </div>
                 </div>
