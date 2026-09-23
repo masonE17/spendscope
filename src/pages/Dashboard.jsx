@@ -19,6 +19,7 @@ export default function Dashboard() {
         month: 'long',
         year: 'numeric'
     });
+    const [isEditingBudget, setIsEditingBudget] = useState(false);
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -26,6 +27,27 @@ export default function Dashboard() {
 
     return (
         <div className="w-full mb-15">
+
+            {/*Editing Budget Section*/}
+            {isEditingBudget && (
+                  <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-110 flex items-center justify-center">
+                    <div className="w-110 bg-[rgb(0,12,31)] border border-gray-600 rounded-[5px] p-7">
+                        <div className="w-full flex flex-col justify-center items-start gap-1">
+                            <p className="text-white text-[18px] font-bold">Edit Budget</p>
+                            <p className="text-gray-400 text-[14px] -mt-1 mb-3">Update your balance and month's spending target</p>
+                            <p className="text-gray-400 text-[12px]">TOTAL BALANCE</p>
+                            <input type="text" placeholder="Enter your total balance" className="w-full bg-[rgb(5,21,49)] border border-gray-600 rounded-[5px] p-2 text-white mb-3" />
+                            <p className="text-gray-400 text-[12px]">MONTHLY BUDGET</p>
+                            <input type="text" placeholder="Enter your monthly budget" className="w-full bg-[rgb(5,21,49)] border border-gray-600 rounded-[5px] p-2 text-white" />
+                            <div className="w-full border-b-2 border-gray-600 mt-3"></div>
+                            <div className="w-full flex flex-row justify-end items-center gap-4 mt-4">
+                                <button className="bg-[#1e90ff] text-white px-3 py-2 text-[12px] rounded-[5px] hover:bg-[#0d7ae9] hover:cursor-pointer" onClick={() => setIsEditingBudget(false)}>Save</button>
+                                <button className="text-gray-400 px-3 py-2 text-[12px] rounded-[5px] border-solid border-gray-400 border hover:text-[#1e90ff] hover:cursor-pointer hover:border-[#0d7ae9]" onClick={() => setIsEditingBudget(false)}>Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
 
             {/* Header Section */}
             <div className="w-full sticky top-0 bg-[rgb(0,12,31)] opacity-98 z-100">
@@ -67,7 +89,7 @@ export default function Dashboard() {
                             <p className="text-gray-400 text-[15px]">Welcome back USER! Here's where you can manage your finances.</p>
                         </div>
                         <div className="flex flex-row justify-center items-center gap-4">
-                            <button className="text-gray-400 px-3 py-2 text-[12px] rounded-[5px] border-solid border-gray-400 border hover:text-[#1e90ff] hover:cursor-pointer hover:border-[#0d7ae9]">Edit Budget</button>
+                            <button className="text-gray-400 px-3 py-2 text-[12px] rounded-[5px] border-solid border-gray-400 border hover:text-[#1e90ff] hover:cursor-pointer hover:border-[#0d7ae9]" onClick={() => setIsEditingBudget(true)}>Edit Budget</button>
                             <Link to="/add-expense">
                                 <button className="bg-[#1e90ff] text-white px-3 py-2 text-[12px] rounded-[5px] hover:bg-[#0d7ae9] hover:cursor-pointer"><FontAwesomeIcon icon={faPlus} /> Add Expense</button>
                             </Link>
