@@ -20,10 +20,30 @@ export default function Dashboard() {
         year: 'numeric'
     });
     const [isEditingBudget, setIsEditingBudget] = useState(false);
+    const [userName, setUserName] = useState("");
 
     useEffect(() => {
         window.scrollTo(0, 0);
+        fetchUser();
     }, []);
+
+    async function fetchUser() {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) {
+            console.log("Error: User not found");
+            return;
+        }
+        let metaData = user?.user_metadata;
+        setUserName(formatUserName(metaData.userName));
+    }
+
+    function formatUserName(name) {
+        if (!name) {
+            console.log("Error: User name is undefined");
+            return "User";
+        }
+        return name.charAt(0).toUpperCase() + name.slice(1);
+    }
 
     return (
         <div className="w-full mb-15">
@@ -73,7 +93,9 @@ export default function Dashboard() {
                     </div>
                     <div className="flex flex-row justify-center items-center gap-4 justify-self-end">
                         <p className="text-white">{ formatter.format(date) }</p>
-                        <p className="text-white">User ICON</p>
+                        <div className="bg-[#1e90ff] w-8 h-8 rounded-full flex justify-center items-center">
+                            <p className="text-white font-bold">{ userName.charAt(0).toUpperCase() }</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -86,7 +108,7 @@ export default function Dashboard() {
                     <div className="flex flex-row justify-between items-center p-2">
                         <div className="flex flex-col justify-center items-start">
                             <p className="text-white text-[30px] font-bold">Dashboard</p>
-                            <p className="text-gray-400 text-[15px]">Welcome back USER! Here's where you can manage your finances.</p>
+                            <p className="text-gray-400 text-[15px]">Welcome back { userName }! Here's where you can manage your finances.</p>
                         </div>
                         <div className="flex flex-row justify-center items-center gap-4">
                             <button className="text-gray-400 px-3 py-2 text-[12px] rounded-[5px] border-solid border-gray-400 border hover:text-[#1e90ff] hover:cursor-pointer hover:border-[#0d7ae9]" onClick={() => setIsEditingBudget(true)}>Edit Budget</button>

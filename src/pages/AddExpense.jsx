@@ -1,4 +1,5 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { supabase } from "../lib/supabaseClient";
 import { Link } from "react-router-dom";
 import MonthlyBudget from "../components/MonthlyBudget";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -18,10 +19,30 @@ export default function AddExpense() {
             month: 'long',
             year: 'numeric'
     });
+    const [userName, setUserName] = useState("");
     
     useEffect(() => {
         window.scrollTo(0, 0);
+        fetchUser();
     }, []);
+
+    async function fetchUser() {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) {
+            console.log("Error: User not found");
+            return;
+        }
+        let metaData = user?.user_metadata;
+        setUserName(formatUserName(metaData.userName));
+    }
+    
+    function formatUserName(name) {
+        if (!name) {
+            console.log("Error: User name is undefined");
+            return "User";
+        }
+        return name.charAt(0).toUpperCase() + name.slice(1);
+    }
 
     return (
         <div className="w-full mb-15">
@@ -50,7 +71,9 @@ export default function AddExpense() {
                     </div>
                     <div className="flex flex-row justify-center items-center gap-4 justify-self-end">
                         <p className="text-white">{ formatter.format(date) }</p>
-                        <p className="text-white">User ICON</p>
+                        <div className="bg-[#1e90ff] w-8 h-8 rounded-full flex justify-center items-center">
+                            <p className="text-white font-bold">{ userName.charAt(0).toUpperCase() }</p>
+                        </div>
                     </div>
                 </div>
             </div>
