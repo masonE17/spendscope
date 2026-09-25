@@ -12,6 +12,7 @@ import CategoryBreakdown from "../components/CategoryBreakdown";
 import IncomeVsExpenses from "../components/IncomeVsExpenses";
 import MonthlyBudget from "../components/MonthlyBudget";
 import FinancialOverview from "../components/FinancialOverview";
+import { useNavigate } from "react-router-dom";
 
 export default function Dashboard() {
     const date = new Date();
@@ -20,7 +21,10 @@ export default function Dashboard() {
         year: 'numeric'
     });
     const [isEditingBudget, setIsEditingBudget] = useState(false);
+    const [isAccessingAccount, setIsAccessingAccount] = useState(false);
+    const [userEmail, setUserEmail] = useState("");
     const [userName, setUserName] = useState("");
+    const navigate = useNavigate();
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -35,6 +39,7 @@ export default function Dashboard() {
         }
         let metaData = user?.user_metadata;
         setUserName(formatUserName(metaData.userName));
+        setUserEmail(user.email);
     }
 
     function formatUserName(name) {
@@ -45,12 +50,39 @@ export default function Dashboard() {
         return name.charAt(0).toUpperCase() + name.slice(1);
     }
 
+    async function signOut() {
+        const { error } = await supabase.auth.signOut();
+        if (error) {
+            console.log(error.message);
+        }
+        navigate("/");
+    }
+
     return (
         <div className="w-full mb-15">
 
+            {/*Accessing Acount Section*/}
+            {isAccessingAccount && (
+                <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-110 flex items-center justify-center">
+                    <div className="w-110 bg-[rgb(0,12,31)] border border-gray-600 rounded-[5px] p-7">
+                        <div className="w-full flex flex-col justify-center items-start gap-1">
+                            <p className="text-white text-[18px] font-bold">Account Information</p>
+                            <p className="text-gray-400 text-[14px] -mt-1 mb-3">Manage your account settings</p>
+                            <p className="text-white text-[16px]">Username: { userName }</p>
+                            <p className="text-white text-[16px]">Email: { userEmail }</p>
+                            <div className="w-full border-b-2 border-gray-600 mt-3"></div>
+                            <div className="w-full flex flex-row justify-end items-center gap-4 mt-4">
+                                <button className="bg-[#1e90ff] text-white px-3 py-2 text-[12px] rounded-[5px] hover:bg-[#0d7ae9] hover:cursor-pointer" onClick={signOut}>Sign Out</button>
+                                <button className="text-gray-400 px-3 py-2 text-[12px] rounded-[5px] border-solid border-gray-400 border hover:text-[#1e90ff] hover:cursor-pointer hover:border-[#0d7ae9]" onClick={() => setIsAccessingAccount(false)}>Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
             {/*Editing Budget Section*/}
             {isEditingBudget && (
-                  <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-110 flex items-center justify-center">
+                <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-110 flex items-center justify-center">
                     <div className="w-110 bg-[rgb(0,12,31)] border border-gray-600 rounded-[5px] p-7">
                         <div className="w-full flex flex-col justify-center items-start gap-1">
                             <p className="text-white text-[18px] font-bold">Edit Budget</p>
@@ -93,9 +125,11 @@ export default function Dashboard() {
                     </div>
                     <div className="flex flex-row justify-center items-center gap-4 justify-self-end">
                         <p className="text-white">{ formatter.format(date) }</p>
-                        <div className="bg-[#1e90ff] w-8 h-8 rounded-full flex justify-center items-center">
-                            <p className="text-white font-bold">{ userName.charAt(0).toUpperCase() }</p>
-                        </div>
+                        <button onClick={() => setIsAccessingAccount(true)}>
+                            <div className="bg-[#1e90ff] w-8 h-8 rounded-full flex justify-center items-center hover:bg-[#0d7ae9] hover:cursor-pointer">
+                                <p className="text-white font-bold">{ userName.charAt(0).toUpperCase() }</p>
+                            </div>
+                        </button>
                     </div>
                 </div>
             </div>

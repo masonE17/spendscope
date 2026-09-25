@@ -4,12 +4,14 @@ import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { supabase } from "../lib/supabaseClient";
+import { useNavigate } from "react-router-dom";
 
 export default function Join() {
     const [signIn, setSignIn] = useState(true);
     const [userName, setUserName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const navigate = useNavigate();
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -23,6 +25,7 @@ export default function Join() {
         }
         setEmail("");
         setPassword("");
+        navigate("/dashboard");
     };
 
     async function handleSignUp() {
@@ -34,6 +37,7 @@ export default function Join() {
         setUserName("");
         setEmail("");
         setPassword("");
+        navigate("/dashboard");
     };
 
     return (
