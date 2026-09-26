@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { supabase } from "../lib/supabaseClient";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
@@ -24,11 +24,16 @@ export default function Dashboard() {
     const [isAccessingAccount, setIsAccessingAccount] = useState(false);
     const [userEmail, setUserEmail] = useState("");
     const [userName, setUserName] = useState("");
+    const [totalBalance, setTotalBalance] = useState("");
+    const [monthlyBudget, setMonthlyBudget] = useState("");
+    const [accountInfo, setAccountInfo] = useState([]);
     const navigate = useNavigate();
+    const isSubmitting = useRef(false);
 
     useEffect(() => {
         window.scrollTo(0, 0);
         fetchUser();
+        fetchAccountInfo();
     }, []);
 
     async function fetchUser() {
@@ -42,12 +47,13 @@ export default function Dashboard() {
         setUserEmail(user.email);
     }
 
-    function formatUserName(name) {
-        if (!name) {
-            console.log("Error: User name is undefined");
-            return "User";
+    async function fetchAccountInfo() {
+        let { data: accounts, error } = await supabase.from('accounts').select('*');
+        if (error) {
+            console.log("Error fetching account info: " + error.message);
+            return;
         }
-        return name.charAt(0).toUpperCase() + name.slice(1);
+        setAccountInfo(accounts);
     }
 
     async function signOut() {
@@ -56,6 +62,68 @@ export default function Dashboard() {
             console.log(error.message);
         }
         navigate("/");
+    }
+
+    async function updateAccount() {
+        if (isSubmitting.current) {
+            return;
+        }
+        isSubmitting.current = true;
+        if (accountInfo.length > 0) {
+            const { data, error } = await supabase.from('accounts').update({ balance: totalBalance, monthly_budget: monthlyBudget }).eq('user_id', accountInfo[0].user_id).select();
+            isSubmitting.current = false;
+            if (error) {
+                console.log("Error updating account: ", error.message);
+                return;
+            }
+            setAccountInfo(data);
+            setTotalBalance("");
+            setMonthlyBudget("");
+            setIsEditingBudget(false);
+            return;
+        }
+        const { data, error } = await supabase.from('accounts').insert([{ balance: totalBalance, monthly_budget: monthlyBudget},]).select();
+        isSubmitting.current = false;
+        if (error) {
+            console.log("Error updating account: ", error.message);
+            return;
+        }
+        setAccountInfo(data);
+        setTotalBalance("");
+        setMonthlyBudget("");
+        setIsEditingBudget(false);
+    }
+
+    function formatUserName(name) {
+        if (!name) {
+            console.log("Error: User name is undefined");
+            return "User";
+        }
+        return name.charAt(0).toUpperCase() + name.slice(1);
+    }
+
+    function handleTotalBalance(balance) {
+        if (balance === "") {
+            console.log("Error: Total balance is empty.");
+            return;
+        }
+        if (isNaN(balance)) {
+            console.log("Error: Total balance is not a number.");
+            return;
+        }
+        setTotalBalance(parseFloat(balance).toFixed(2));
+    }
+
+    function handleMonthlyBudget(budget) {
+        if (budget === "") {
+            console.log("Error: Monthly budget is empty.");
+            return;
+        }
+        if (isNaN(budget)) {
+            console.log("Error: Monthly budget is not a number.");
+            return;
+        }
+        setMonthlyBudget(parseFloat(budget).toFixed(2));
     }
 
     return (
@@ -88,12 +156,12 @@ export default function Dashboard() {
                             <p className="text-white text-[18px] font-bold">Edit Budget</p>
                             <p className="text-gray-400 text-[14px] -mt-1 mb-3">Update your balance and month's spending target</p>
                             <p className="text-gray-400 text-[12px]">TOTAL BALANCE</p>
-                            <input type="text" placeholder="Enter your total balance" className="w-full bg-[rgb(5,21,49)] border border-gray-600 rounded-[5px] p-2 text-white mb-3" />
+                            <input type="text" placeholder="Enter your total balance" className="w-full bg-[rgb(5,21,49)] border border-gray-600 rounded-[5px] p-2 text-white mb-3" onChange={(e) => handleTotalBalance(e.target.value)} />
                             <p className="text-gray-400 text-[12px]">MONTHLY BUDGET</p>
-                            <input type="text" placeholder="Enter your monthly budget" className="w-full bg-[rgb(5,21,49)] border border-gray-600 rounded-[5px] p-2 text-white" />
+                            <input type="text" placeholder="Enter your monthly budget" className="w-full bg-[rgb(5,21,49)] border border-gray-600 rounded-[5px] p-2 text-white" onChange={(e) => handleMonthlyBudget(e.target.value)} />
                             <div className="w-full border-b-2 border-gray-600 mt-3"></div>
                             <div className="w-full flex flex-row justify-end items-center gap-4 mt-4">
-                                <button className="bg-[#1e90ff] text-white px-3 py-2 text-[12px] rounded-[5px] hover:bg-[#0d7ae9] hover:cursor-pointer" onClick={() => setIsEditingBudget(false)}>Save</button>
+                                <button className="bg-[#1e90ff] text-white px-3 py-2 text-[12px] rounded-[5px] hover:bg-[#0d7ae9] hover:cursor-pointer" onClick={updateAccount}>Save</button>
                                 <button className="text-gray-400 px-3 py-2 text-[12px] rounded-[5px] border-solid border-gray-400 border hover:text-[#1e90ff] hover:cursor-pointer hover:border-[#0d7ae9]" onClick={() => setIsEditingBudget(false)}>Cancel</button>
                             </div>
                         </div>
@@ -156,7 +224,7 @@ export default function Dashboard() {
                 {/*User Financial Overview Section*/}
                 <div className="w-full max-w-300 m-auto">
                     <div className="flex flex-row justify-center items-center py-3 px-2 gap-5">
-                        <FinancialOverview />
+                        <FinancialOverview accountInfo={accountInfo} />
                     </div>
                 </div>
 
