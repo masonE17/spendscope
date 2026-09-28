@@ -24,18 +24,21 @@ export default function Dashboard() {
     });
     const [isEditingBudget, setIsEditingBudget] = useState(false);
     const [isAccessingAccount, setIsAccessingAccount] = useState(false);
+    const isSubmitting = useRef(false);
+
     const [userEmail, setUserEmail] = useState("");
     const [userName, setUserName] = useState("");
+
     const [totalBalance, setTotalBalance] = useState("");
     const [monthlyBudget, setMonthlyBudget] = useState("");
-    const [accountInfo, setAccountInfo] = useState([]);
+    const [financialSummary, setFinancialSummary] = useState([]);
+
     const navigate = useNavigate();
-    const isSubmitting = useRef(false);
 
     useEffect(() => {
         window.scrollTo(0, 0);
         fetchUser();
-        fetchAccountInfo();
+        fetchFinancialSummary();
     }, []);
 
     async function fetchUser() {
@@ -49,13 +52,13 @@ export default function Dashboard() {
         setUserEmail(user.email);
     }
 
-    async function fetchAccountInfo() {
+    async function fetchFinancialSummary() {
         let { data: accounts, error } = await supabase.from('accounts').select('*');
         if (error) {
             console.log("Error fetching account info: " + error.message);
             return;
         }
-        setAccountInfo(accounts);
+        setFinancialSummary(accounts);
     }
 
     async function signOut() {
@@ -66,19 +69,19 @@ export default function Dashboard() {
         navigate("/");
     }
 
-    async function updateBudget() {
+    async function updateFinancialSummary() {
         if (isSubmitting.current) {
             return;
         }
         isSubmitting.current = true;
-        if (accountInfo.length > 0) {
-            const { data, error } = await supabase.from('accounts').update({ balance: totalBalance, monthly_budget: monthlyBudget }).eq('user_id', accountInfo[0].user_id).select();
+        if (financialSummary.length > 0) {
+            const { data, error } = await supabase.from('accounts').update({ balance: totalBalance, monthly_budget: monthlyBudget }).eq('user_id', financialSummary[0].user_id).select();
             isSubmitting.current = false;
             if (error) {
                 console.log("Error updating account: ", error.message);
                 return;
             }
-            setAccountInfo(data);
+            setFinancialSummary(data);
             setTotalBalance("");
             setMonthlyBudget("");
             setIsEditingBudget(false);
@@ -90,7 +93,7 @@ export default function Dashboard() {
             console.log("Error updating account: ", error.message);
             return;
         }
-        setAccountInfo(data);
+        setFinancialSummary(data);
         setTotalBalance("");
         setMonthlyBudget("");
         setIsEditingBudget(false);
@@ -192,7 +195,7 @@ export default function Dashboard() {
                             <input type="text" placeholder="Enter your monthly budget" className="w-full bg-[rgb(5,21,49)] border border-gray-600 rounded-[5px] p-2 text-white" onChange={(e) => handleMonthlyBudget(e.target.value)} />
                             <div className="w-full border-b-2 border-gray-600 mt-3"></div>
                             <div className="w-full flex flex-row justify-end items-center gap-4 mt-4">
-                                <button className="bg-[#1e90ff] text-white px-3 py-2 text-[12px] rounded-[5px] hover:bg-[#0d7ae9] hover:cursor-pointer" onClick={updateBudget}>Save</button>
+                                <button className="bg-[#1e90ff] text-white px-3 py-2 text-[12px] rounded-[5px] hover:bg-[#0d7ae9] hover:cursor-pointer" onClick={updateFinancialSummary}>Save</button>
                                 <button className="text-gray-400 px-3 py-2 text-[12px] rounded-[5px] border-solid border-gray-400 border hover:text-[#1e90ff] hover:cursor-pointer hover:border-[#0d7ae9]" onClick={() => setIsEditingBudget(false)}>Cancel</button>
                             </div>
                         </div>
@@ -255,7 +258,7 @@ export default function Dashboard() {
                 {/*User Financial Overview Section*/}
                 <div className="w-full max-w-300 m-auto">
                     <div className="flex flex-row justify-center items-center py-3 px-2 gap-5">
-                        <FinancialOverview accountInfo={accountInfo} />
+                        <FinancialOverview financialSummary={financialSummary} />
                     </div>
                 </div>
 
