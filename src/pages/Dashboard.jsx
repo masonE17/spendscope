@@ -156,9 +156,7 @@ export default function Dashboard() {
                                 </div>
                             </div>
 
-
                             <div className="w-full mt-3">
-                                <p className="text-white font-bold text-[14px] mb-2">Profile</p>
                                 <p className="text-gray-400 text-[12px] mb-1">DISPLAY NAME</p>
                                 <input type="text" placeholder={userName} className="w-full bg-[rgb(5,21,49)] border border-gray-600 rounded-[5px] p-2 text-white mb-3"/>
                                 <p className="text-gray-400 text-[12px] mb-1">EMAIL</p>
