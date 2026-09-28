@@ -187,16 +187,21 @@ export default function Dashboard() {
                 <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-110 flex items-center justify-center">
                     <div className="w-110 bg-[rgb(0,12,31)] border border-gray-600 rounded-[5px] p-7">
                         <div className="w-full flex flex-col justify-center items-start gap-1">
-                            <p className="text-white text-[18px] font-bold">Edit Budget</p>
-                            <p className="text-gray-400 text-[14px] -mt-1 mb-3">Update your balance and month's spending target</p>
-                            <p className="text-gray-400 text-[12px]">TOTAL BALANCE</p>
+                            <div className="w-full flex flex-row justify-between items-center">
+                                <div className="flex flex-col justify-start items-start gap-1">
+                                    <p className="text-white text-[16px] font-bold">Edit Budget</p>
+                                    <p className="text-gray-400 text-[12px] -mt-1 mb-3">Update your balance and month's spending target</p>
+                                </div>
+                                <button className="text-gray-400 p-2 text-[12px] rounded-[5px] border-solid border-gray-400 border hover:text-[#1e90ff] hover:cursor-pointer hover:border-[#0d7ae9]" onClick={() => setIsEditingBudget(false)}><FontAwesomeIcon icon={faX} /></button>
+                            </div>
+                            <p className="text-gray-400 text-[12px] mb-1">TOTAL BALANCE</p>
                             <input type="text" placeholder="Enter your total balance" className="w-full bg-[rgb(5,21,49)] border border-gray-600 rounded-[5px] p-2 text-white mb-3" onChange={(e) => handleTotalBalance(e.target.value)} />
-                            <p className="text-gray-400 text-[12px]">MONTHLY BUDGET</p>
-                            <input type="text" placeholder="Enter your monthly budget" className="w-full bg-[rgb(5,21,49)] border border-gray-600 rounded-[5px] p-2 text-white" onChange={(e) => handleMonthlyBudget(e.target.value)} />
+                            <p className="text-gray-400 text-[12px] mb-1">MONTHLY BUDGET</p>
+                            <input type="text" placeholder="Enter your monthly budget" className="w-full bg-[rgb(5,21,49)] border border-gray-600 rounded-[5px] p-2 text-white mb-3" onChange={(e) => handleMonthlyBudget(e.target.value)} />
                             <div className="w-full border-b-2 border-gray-600 mt-3"></div>
                             <div className="w-full flex flex-row justify-end items-center gap-4 mt-4">
-                                <button className="bg-[#1e90ff] text-white px-3 py-2 text-[12px] rounded-[5px] hover:bg-[#0d7ae9] hover:cursor-pointer" onClick={updateFinancialSummary}>Save</button>
                                 <button className="text-gray-400 px-3 py-2 text-[12px] rounded-[5px] border-solid border-gray-400 border hover:text-[#1e90ff] hover:cursor-pointer hover:border-[#0d7ae9]" onClick={() => setIsEditingBudget(false)}>Cancel</button>
+                                <button className="bg-[#1e90ff] text-white px-3 py-2 text-[12px] rounded-[5px] hover:bg-[#0d7ae9] hover:cursor-pointer" onClick={updateFinancialSummary}>Save</button>
                             </div>
                         </div>
                     </div>
