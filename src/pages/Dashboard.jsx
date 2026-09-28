@@ -7,6 +7,8 @@ import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
 import { faCoins } from "@fortawesome/free-solid-svg-icons";
 import { faGasPump } from "@fortawesome/free-solid-svg-icons";
 import { faBowlFood } from "@fortawesome/free-solid-svg-icons";
+import { faX } from "@fortawesome/free-solid-svg-icons";
+import { faArrowRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 import CategoryBreakdown from "../components/CategoryBreakdown";
 import IncomeVsExpenses from "../components/IncomeVsExpenses";
@@ -64,7 +66,7 @@ export default function Dashboard() {
         navigate("/");
     }
 
-    async function updateAccount() {
+    async function updateBudget() {
         if (isSubmitting.current) {
             return;
         }
@@ -92,6 +94,10 @@ export default function Dashboard() {
         setTotalBalance("");
         setMonthlyBudget("");
         setIsEditingBudget(false);
+    }
+
+    async function updateUserProfile() {
+        
     }
 
     function formatUserName(name) {
@@ -134,15 +140,42 @@ export default function Dashboard() {
                 <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-110 flex items-center justify-center">
                     <div className="w-110 bg-[rgb(0,12,31)] border border-gray-600 rounded-[5px] p-7">
                         <div className="w-full flex flex-col justify-center items-start gap-1">
-                            <p className="text-white text-[18px] font-bold">Account Information</p>
-                            <p className="text-gray-400 text-[14px] -mt-1 mb-3">Manage your account settings</p>
-                            <p className="text-white text-[16px]">Username: { userName }</p>
-                            <p className="text-white text-[16px]">Email: { userEmail }</p>
-                            <div className="w-full border-b-2 border-gray-600 mt-3"></div>
-                            <div className="w-full flex flex-row justify-end items-center gap-4 mt-4">
-                                <button className="bg-[#1e90ff] text-white px-3 py-2 text-[12px] rounded-[5px] hover:bg-[#0d7ae9] hover:cursor-pointer" onClick={signOut}>Sign Out</button>
-                                <button className="text-gray-400 px-3 py-2 text-[12px] rounded-[5px] border-solid border-gray-400 border hover:text-[#1e90ff] hover:cursor-pointer hover:border-[#0d7ae9]" onClick={() => setIsAccessingAccount(false)}>Cancel</button>
+
+                            <div className="flex flex-row justify-between items-center w-full">
+                                <div className="flex flex-row justify-start items-center gap-3">
+                                    <div className="bg-[#1e90ff] w-13 h-13 rounded-full flex justify-center items-center hover:bg-[#0d7ae9] hover:cursor-pointer">
+                                        <p className="text-white font-bold text-[24px]">{ userName.charAt(0).toUpperCase() }</p>
+                                    </div>
+                                    <div className="flex flex-col justify-center items-start">
+                                        <p className="text-white text-[20px] font-bold">{ userName }</p>
+                                        <p className="text-gray-400 text-[16px]">{ userEmail }</p>
+                                    </div>
+                                </div>
+                                <div>
+                                    <button className="text-gray-400 p-2 text-[12px] rounded-[5px] border-solid border-gray-400 border hover:text-[#1e90ff] hover:cursor-pointer hover:border-[#0d7ae9]" onClick={() => setIsAccessingAccount(false)}><FontAwesomeIcon icon={faX} /></button>
+                                </div>
                             </div>
+
+
+                            <div className="w-full mt-3">
+                                <p className="text-white font-bold text-[14px] mb-2">Profile</p>
+                                <p className="text-gray-400 text-[12px] mb-1">DISPLAY NAME</p>
+                                <input type="text" placeholder={userName} className="w-full bg-[rgb(5,21,49)] border border-gray-600 rounded-[5px] p-2 text-white mb-3"/>
+                                <p className="text-gray-400 text-[12px] mb-1">EMAIL</p>
+                                <input type="text" placeholder={userEmail} className="w-full bg-[rgb(5,21,49)] border border-gray-600 rounded-[5px] p-2 text-white mb-3"/>
+                            </div>
+
+
+                            <div className="w-full border-b-2 border-gray-600 mt-3"></div>
+
+                            <div className="w-full flex flex-row justify-between items-center mt-3">
+                                <button className="text-red-400 px-3 py-2 text-[12px] rounded-[5px] border-solid border-red-400 border hover:text-red-500 hover:cursor-pointer hover:border-red-500" onClick={signOut}><FontAwesomeIcon icon={faArrowRightFromBracket} /> Sign Out</button>
+                                <div className="flex flex-row justify-center items-center gap-4">
+                                    <button className="text-gray-400 px-3 py-2 text-[12px] rounded-[5px] border-solid border-gray-400 border hover:text-[#1e90ff] hover:cursor-pointer hover:border-[#0d7ae9]" onClick={() => setIsAccessingAccount(false)}>Cancel</button>
+                                    <button className="bg-[#1e90ff] text-white px-3 py-2 text-[12px] rounded-[5px] hover:bg-[#0d7ae9] hover:cursor-pointer" onClick={updateUserProfile}>Save Changes</button>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -161,7 +194,7 @@ export default function Dashboard() {
                             <input type="text" placeholder="Enter your monthly budget" className="w-full bg-[rgb(5,21,49)] border border-gray-600 rounded-[5px] p-2 text-white" onChange={(e) => handleMonthlyBudget(e.target.value)} />
                             <div className="w-full border-b-2 border-gray-600 mt-3"></div>
                             <div className="w-full flex flex-row justify-end items-center gap-4 mt-4">
-                                <button className="bg-[#1e90ff] text-white px-3 py-2 text-[12px] rounded-[5px] hover:bg-[#0d7ae9] hover:cursor-pointer" onClick={updateAccount}>Save</button>
+                                <button className="bg-[#1e90ff] text-white px-3 py-2 text-[12px] rounded-[5px] hover:bg-[#0d7ae9] hover:cursor-pointer" onClick={updateBudget}>Save</button>
                                 <button className="text-gray-400 px-3 py-2 text-[12px] rounded-[5px] border-solid border-gray-400 border hover:text-[#1e90ff] hover:cursor-pointer hover:border-[#0d7ae9]" onClick={() => setIsEditingBudget(false)}>Cancel</button>
                             </div>
                         </div>
