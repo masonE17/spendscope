@@ -9,7 +9,8 @@ import { faX } from '@fortawesome/free-solid-svg-icons';
 import { faLinkedin } from '@fortawesome/free-brands-svg-icons';
 import { faGithub } from '@fortawesome/free-brands-svg-icons';
 import { Link } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { supabase } from "../lib/supabaseClient";
 
 function HomeDetails({ fWord, lWord, icon }) {
   return (
@@ -49,10 +50,20 @@ function PricingDetails({ plan, price, longevity, description, includedFeatures,
 const scrollTo = (id) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
 
 export default function App() {
+  const [isSignedIn, setIsSignedIn] = useState(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    fetchUser();
   }, []);
+
+  async function fetchUser() {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user) {
+      setIsSignedIn(true);
+      return;
+    }
+  }
 
   return (
     <div className="w-full">
@@ -75,9 +86,11 @@ export default function App() {
               <div className="w-full border-b-2 border-transparent group-hover:border-[#1e90ff] rounded-[5px]"></div>
             </div>
             <div className="group flex flex-col justify-center items-center">
-              <Link to="/dashboard">
+
+              <Link to={isSignedIn ? "/dashboard" : "/join"}>
                 <button className="text-center group-hover:text-white">Dashboard</button>
               </Link>
+
               <div className="w-full border-b-2 border-transparent group-hover:border-[#1e90ff] rounded-[5px]"></div>
             </div>
           </div>
@@ -201,7 +214,7 @@ export default function App() {
               <Link to="/join">
                 <button className="bg-[#1e90ff] text-white p-2 text-[12px] rounded-[5px] hover:bg-[#0d7ae9] hover:cursor-pointer">Get Started Free</button>
               </Link>
-              <Link to="/dashboard">
+              <Link to={isSignedIn ? "/dashboard" : "/join"}>
                 <button className="bg-[rgb(5,21,49)] text-gray-400 p-2 text-[12px] rounded-[5px] border-solid border-gray-400 border hover:text-[#1e90ff] hover:cursor-pointer hover:border-[#0d7ae9]">View DashBoard</button>
               </Link>
             </div>
