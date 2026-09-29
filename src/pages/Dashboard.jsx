@@ -29,7 +29,6 @@ export default function Dashboard() {
     const [userEmail, setUserEmail] = useState("");
     const [userName, setUserName] = useState("");
     const [updateUserName, setUpdateUserName] = useState("");
-    const [updateUserEmail, setUpdateUserEmail] = useState("");
 
     const [totalBalance, setTotalBalance] = useState("");
     const [monthlyBudget, setMonthlyBudget] = useState("");
@@ -115,19 +114,13 @@ export default function Dashboard() {
         if (isSubmitting.current) {
             return;
         }
-        const updates = {};
-        if (updateUserEmail !== "") {
-            updates.email = updateUserEmail;
-        }
-        if (updateUserName !== "") {
-            updates.data = { userName: updateUserName };
-        }
-        if (Object.keys(updates).length === 0) {
-            console.log("Error: No updates to make.");
+        isSubmitting.current = true;
+        if (updateUserName === "") {
+            console.log("Error: User name is empty.");
+            isSubmitting.current = false;
             return;
         }
-        isSubmitting.current = true;
-        const { data: {user}, error } = await supabase.auth.updateUser(updates);
+        const { data: {user}, error } = await supabase.auth.updateUser({data: { userName: updateUserName } });
         isSubmitting.current = false;
         if (error) {
             console.log("Error updating user profile: ", error.message);
@@ -136,7 +129,6 @@ export default function Dashboard() {
         let metaData = user?.user_metadata;
         setUserName(formatUserName(metaData.userName));
         setUpdateUserName("");
-        setUpdateUserEmail("");
         setIsAccessingAccount(false);
     }
 
@@ -175,8 +167,6 @@ export default function Dashboard() {
                             <div className="w-full mt-3">
                                 <p className="text-gray-400 text-[12px] mb-1">DISPLAY NAME</p>
                                 <input type="text" placeholder={userName} className="w-full bg-[rgb(5,21,49)] border border-gray-600 rounded-[5px] p-2 text-white mb-3" onChange={(e) => setUpdateUserName(e.target.value)}/>
-                                <p className="text-gray-400 text-[12px] mb-1">EMAIL</p>
-                                <input type="email" placeholder={userEmail} className="w-full bg-[rgb(5,21,49)] border border-gray-600 rounded-[5px] p-2 text-white mb-3" onChange={(e) => setUpdateUserEmail(e.target.value)}/>
                             </div>
 
 
@@ -203,9 +193,9 @@ export default function Dashboard() {
                             <p className="text-white text-[18px] font-bold">Edit Budget</p>
                             <p className="text-gray-400 text-[14px] -mt-1 mb-3">Update your balance and month's spending target</p>
                             <p className="text-gray-400 text-[12px]">TOTAL BALANCE</p>
-                            <input type="text" placeholder="Enter your total balance" className="w-full bg-[rgb(5,21,49)] border border-gray-600 rounded-[5px] p-2 text-white mb-3" onChange={(e) => setTotalBalance(e.target.value)} />
+                            <input type="text" placeholder="Total balance (e.g. 10000.00)" className="w-full bg-[rgb(5,21,49)] border border-gray-600 rounded-[5px] p-2 text-white mb-3" onChange={(e) => setTotalBalance(e.target.value)} />
                             <p className="text-gray-400 text-[12px]">MONTHLY BUDGET</p>
-                            <input type="text" placeholder="Enter your monthly budget" className="w-full bg-[rgb(5,21,49)] border border-gray-600 rounded-[5px] p-2 text-white" onChange={(e) => setMonthlyBudget(e.target.value)} />
+                            <input type="text" placeholder="Monthly budget (e.g. 2500.00)" className="w-full bg-[rgb(5,21,49)] border border-gray-600 rounded-[5px] p-2 text-white" onChange={(e) => setMonthlyBudget(e.target.value)} />
                             <div className="w-full border-b-2 border-gray-600 mt-3"></div>
                             <div className="w-full flex flex-row justify-end items-center gap-4 mt-4">
                                 <button className="text-gray-400 px-3 py-2 text-[12px] rounded-[5px] border-solid border-gray-400 border hover:text-[#1e90ff] hover:cursor-pointer hover:border-[#0d7ae9]" onClick={() => setIsEditingBudget(false)}>Cancel</button>
