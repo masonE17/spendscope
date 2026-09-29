@@ -28,6 +28,8 @@ export default function Dashboard() {
 
     const [userEmail, setUserEmail] = useState("");
     const [userName, setUserName] = useState("");
+    const [updateUserName, setUpdateUserName] = useState("");
+    const [updateUserEmail, setUpdateUserEmail] = useState("");
 
     const [totalBalance, setTotalBalance] = useState("");
     const [monthlyBudget, setMonthlyBudget] = useState("");
@@ -73,9 +75,19 @@ export default function Dashboard() {
         if (isSubmitting.current) {
             return;
         }
+        if (totalBalance === "" || monthlyBudget === "") {
+            console.log("Error: Total balance or monthly budget is empty.");
+            return;
+        }
+        if (isNaN(totalBalance) || isNaN(monthlyBudget)) {
+            console.log("Error: Total balance or monthly budget is not a number.");
+            return;
+        }
+        const balance = parseFloat(totalBalance).toFixed(2);
+        const budget = parseFloat(monthlyBudget).toFixed(2);
         isSubmitting.current = true;
         if (financialSummary.length > 0) {
-            const { data, error } = await supabase.from('accounts').update({ balance: totalBalance, monthly_budget: monthlyBudget }).eq('user_id', financialSummary[0].user_id).select();
+            const { data, error } = await supabase.from('accounts').update({ balance: balance, monthly_budget: budget }).eq('user_id', financialSummary[0].user_id).select();
             isSubmitting.current = false;
             if (error) {
                 console.log("Error updating account: ", error.message);
@@ -100,7 +112,32 @@ export default function Dashboard() {
     }
 
     async function updateUserProfile() {
-        
+        if (isSubmitting.current) {
+            return;
+        }
+        const updates = {};
+        if (updateUserEmail !== "") {
+            updates.email = updateUserEmail;
+        }
+        if (updateUserName !== "") {
+            updates.data = { userName: updateUserName };
+        }
+        if (Object.keys(updates).length === 0) {
+            console.log("Error: No updates to make.");
+            return;
+        }
+        isSubmitting.current = true;
+        const { data: {user}, error } = await supabase.auth.updateUser(updates);
+        isSubmitting.current = false;
+        if (error) {
+            console.log("Error updating user profile: ", error.message);
+            return;
+        }
+        let metaData = user?.user_metadata;
+        setUserName(formatUserName(metaData.userName));
+        setUpdateUserName("");
+        setUpdateUserEmail("");
+        setIsAccessingAccount(false);
     }
 
     function formatUserName(name) {
@@ -109,30 +146,6 @@ export default function Dashboard() {
             return "User";
         }
         return name.charAt(0).toUpperCase() + name.slice(1);
-    }
-
-    function handleTotalBalance(balance) {
-        if (balance === "") {
-            console.log("Error: Total balance is empty.");
-            return;
-        }
-        if (isNaN(balance)) {
-            console.log("Error: Total balance is not a number.");
-            return;
-        }
-        setTotalBalance(parseFloat(balance).toFixed(2));
-    }
-
-    function handleMonthlyBudget(budget) {
-        if (budget === "") {
-            console.log("Error: Monthly budget is empty.");
-            return;
-        }
-        if (isNaN(budget)) {
-            console.log("Error: Monthly budget is not a number.");
-            return;
-        }
-        setMonthlyBudget(parseFloat(budget).toFixed(2));
     }
 
     return (
@@ -161,9 +174,9 @@ export default function Dashboard() {
 
                             <div className="w-full mt-3">
                                 <p className="text-gray-400 text-[12px] mb-1">DISPLAY NAME</p>
-                                <input type="text" placeholder={userName} className="w-full bg-[rgb(5,21,49)] border border-gray-600 rounded-[5px] p-2 text-white mb-3"/>
+                                <input type="text" placeholder={userName} className="w-full bg-[rgb(5,21,49)] border border-gray-600 rounded-[5px] p-2 text-white mb-3" onChange={(e) => setUpdateUserName(e.target.value)}/>
                                 <p className="text-gray-400 text-[12px] mb-1">EMAIL</p>
-                                <input type="text" placeholder={userEmail} className="w-full bg-[rgb(5,21,49)] border border-gray-600 rounded-[5px] p-2 text-white mb-3"/>
+                                <input type="email" placeholder={userEmail} className="w-full bg-[rgb(5,21,49)] border border-gray-600 rounded-[5px] p-2 text-white mb-3" onChange={(e) => setUpdateUserEmail(e.target.value)}/>
                             </div>
 
 
@@ -190,9 +203,9 @@ export default function Dashboard() {
                             <p className="text-white text-[18px] font-bold">Edit Budget</p>
                             <p className="text-gray-400 text-[14px] -mt-1 mb-3">Update your balance and month's spending target</p>
                             <p className="text-gray-400 text-[12px]">TOTAL BALANCE</p>
-                            <input type="text" placeholder="Enter your total balance" className="w-full bg-[rgb(5,21,49)] border border-gray-600 rounded-[5px] p-2 text-white mb-3" onChange={(e) => handleTotalBalance(e.target.value)} />
+                            <input type="text" placeholder="Enter your total balance" className="w-full bg-[rgb(5,21,49)] border border-gray-600 rounded-[5px] p-2 text-white mb-3" onChange={(e) => setTotalBalance(e.target.value)} />
                             <p className="text-gray-400 text-[12px]">MONTHLY BUDGET</p>
-                            <input type="text" placeholder="Enter your monthly budget" className="w-full bg-[rgb(5,21,49)] border border-gray-600 rounded-[5px] p-2 text-white" onChange={(e) => handleMonthlyBudget(e.target.value)} />
+                            <input type="text" placeholder="Enter your monthly budget" className="w-full bg-[rgb(5,21,49)] border border-gray-600 rounded-[5px] p-2 text-white" onChange={(e) => setMonthlyBudget(e.target.value)} />
                             <div className="w-full border-b-2 border-gray-600 mt-3"></div>
                             <div className="w-full flex flex-row justify-end items-center gap-4 mt-4">
                                 <button className="bg-[#1e90ff] text-white px-3 py-2 text-[12px] rounded-[5px] hover:bg-[#0d7ae9] hover:cursor-pointer" onClick={updateFinancialSummary}>Save</button>
