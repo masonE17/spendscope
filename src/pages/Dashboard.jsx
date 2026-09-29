@@ -208,8 +208,8 @@ export default function Dashboard() {
                             <input type="text" placeholder="Enter your monthly budget" className="w-full bg-[rgb(5,21,49)] border border-gray-600 rounded-[5px] p-2 text-white" onChange={(e) => setMonthlyBudget(e.target.value)} />
                             <div className="w-full border-b-2 border-gray-600 mt-3"></div>
                             <div className="w-full flex flex-row justify-end items-center gap-4 mt-4">
-                                <button className="bg-[#1e90ff] text-white px-3 py-2 text-[12px] rounded-[5px] hover:bg-[#0d7ae9] hover:cursor-pointer" onClick={updateFinancialSummary}>Save</button>
                                 <button className="text-gray-400 px-3 py-2 text-[12px] rounded-[5px] border-solid border-gray-400 border hover:text-[#1e90ff] hover:cursor-pointer hover:border-[#0d7ae9]" onClick={() => setIsEditingBudget(false)}>Cancel</button>
+                                <button className="bg-[#1e90ff] text-white px-3 py-2 text-[12px] rounded-[5px] hover:bg-[#0d7ae9] hover:cursor-pointer" onClick={updateFinancialSummary}>Save</button>
                             </div>
                         </div>
                     </div>
