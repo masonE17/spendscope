@@ -96,7 +96,6 @@ export default function Dashboard() {
             setTotalBalance("");
             setMonthlyBudget("");
             setIsEditingBudget(false);
-            return;
         }
         const { data, error } = await supabase.from('accounts').insert([{ balance: totalBalance, monthly_budget: monthlyBudget},]).select();
         isSubmitting.current = false;

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { supabase } from "../lib/supabaseClient";
 import { Link } from "react-router-dom";
 import MonthlyBudget from "../components/MonthlyBudget";
@@ -19,13 +19,35 @@ export default function AddExpense() {
             month: 'long',
             year: 'numeric'
     });
+    const expenseFormatter = new Intl.DateTimeFormat('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric'
+    });
+    const items = [
+        { key: "income", label: "Income", icon: faCoins },
+        { key: "groceries", label: "Groceries", icon: faCartShopping },
+        { key: "shopping", label: "Shopping", icon: faBagShopping },
+        { key: "food", label: "Food", icon: faBowlFood },
+        { key: "transport", label: "Transport", icon: faGasPump },
+        { key: "other", label: "Other", icon: faEllipsis }
+    ];
+
     const [isAccessingAccount, setIsAccessingAccount] = useState(false);
+    const isSubmitting = useRef(false);
+
     const [userName, setUserName] = useState("");
     const [userEmail, setUserEmail] = useState("");
+    const [amount, setAmount] = useState("");
+    const [location, setLocation] = useState("");
+    const [category, setCategory] = useState("");
+    const [expenses, setExpenses] = useState([]);
+
     
     useEffect(() => {
         window.scrollTo(0, 0);
         fetchUser();
+        fetchExpenses();
     }, []);
 
     async function fetchUser() {
@@ -37,6 +59,32 @@ export default function AddExpense() {
         let metaData = user?.user_metadata;
         setUserName(formatUserName(metaData.userName));
         setUserEmail(user.email);
+    }
+
+    async function fetchExpenses() {
+        let { data, error } = await supabase.from('expenses').select('*').limit(2).order('created_at', { ascending: false })
+        if (error) {
+            console.log(error.message);
+            return;
+        }
+        setExpenses(data);
+    }
+
+    async function addExpense() {
+        if (isSubmitting.current) {
+            return;
+        }
+        isSubmitting.current = true;
+        const { error } = await supabase.from('expenses').insert([{ amount: amount, location: location, category: category },]).select()
+        isSubmitting.current = false;
+        if (error) {
+            console.log(error.message);
+            return;
+        }
+        setAmount("");
+        setLocation("");
+        setCategory("");
+        fetchExpenses();
     }
     
     function formatUserName(name) {
@@ -134,69 +182,31 @@ export default function AddExpense() {
                             </div>
                             <div className="w-full flex flex-col justify-center items-start gap-1 mb-1">
                                 <p className="text-gray-400 text-[14px]">Amount</p>
-                                <input type="text" placeholder="Enter Amount" className="w-full bg-[rgb(0,12,31)] border border-gray-600 text-white text-[14px] focus:outline-none px-2 py-3 rounded-[5px]" />
+                                <input type="text" value={amount} placeholder="Enter Amount" className="w-full bg-[rgb(0,12,31)] border border-gray-600 text-white text-[14px] focus:outline-none px-2 py-3 rounded-[5px]" onChange={(e) => setAmount(e.target.value)} />
                             </div>
                             <div className="w-full flex flex-col justify-center items-start gap-1 mb-1">
                                 <p className="text-gray-400 text-[14px]">Location</p>
-                                <input type="text" placeholder="Enter Location" className="w-full bg-[rgb(0,12,31)] border border-gray-600 text-white text-[14px] focus:outline-none px-2 py-3 rounded-[5px]" />
+                                <input type="text" value={location} placeholder="Enter Location" className="w-full bg-[rgb(0,12,31)] border border-gray-600 text-white text-[14px] focus:outline-none px-2 py-3 rounded-[5px]" onChange={(e) => setLocation(e.target.value)} />
                             </div>
                             <div className="w-full flex flex-col justify-center items-start gap-1 mb-4">
                                 <p className="text-gray-400 text-[14px]">Category</p>
                                 <div className="w-full grid grid-cols-3 grid-rows-2 gap-2">
-                                    <button className="w-full h-20 text-gray-400 px-3 py-2 text-[12px] rounded-[5px] border-solid border-gray-400 border hover:text-[#1e90ff] hover:cursor-pointer hover:border-[#0d7ae9]">
-                                        <div className="flex flex-col justify-center items-center gap-1">
-                                            <div className="px-2 py-1 bg-[#1e90ff]/20 rounded-[5px] text-[#1e90ff] text-[20px]">
-                                                <FontAwesomeIcon icon={faCoins} />
+                                    {items.map((item) => (
+                                        <button key={item.key} className="w-full h-20 text-gray-400 px-3 py-2 text-[12px] rounded-[5px] border-solid border-gray-400 border hover:text-[#1e90ff] hover:cursor-pointer hover:border-[#0d7ae9]" onClick={() => setCategory(item.key)} style={{ backgroundColor: category === item.key ? "rgb(0,12,31)" : "transparent", borderColor: category === item.key ? "#1e90ff" : "gray", boxShadow: category === item.key ? "0 0 5px #1e90ff" : "none" }}>
+                                            <div className="flex flex-col justify-center items-center gap-1">
+                                                <div className="px-2 py-1 bg-[#1e90ff]/20 rounded-[5px] text-[#1e90ff] text-[20px]">
+                                                    <FontAwesomeIcon icon={item.icon} />
+                                                </div>
+                                                <p className="text-white text-[14px]">{item.label}</p>
                                             </div>
-                                            <p className="text-white text-[14px]">Income</p>
-                                        </div>
-                                    </button>
-                                    <button className="w-full h-20 text-gray-400 px-3 py-2 text-[12px] rounded-[5px] border-solid border-gray-400 border hover:text-[#1e90ff] hover:cursor-pointer hover:border-[#0d7ae9]">
-                                        <div className="flex flex-col justify-center items-center gap-1">
-                                            <div className="px-2 py-1 bg-[#1e90ff]/20 rounded-[5px] text-[#1e90ff] text-[20px]">
-                                                <FontAwesomeIcon icon={faCartShopping} />
-                                            </div>
-                                            <p className="text-white text-[14px]">Groceries</p>
-                                        </div>
-                                    </button>
-                                    <button className="w-full h-20 text-gray-400 px-3 py-2 text-[12px] rounded-[5px] border-solid border-gray-400 border hover:text-[#1e90ff] hover:cursor-pointer hover:border-[#0d7ae9]">
-                                        <div className="flex flex-col justify-center items-center gap-1">
-                                            <div className="px-2 py-1 bg-[#1e90ff]/20 rounded-[5px] text-[#1e90ff] text-[20px]">
-                                                <FontAwesomeIcon icon={faBagShopping} />
-                                            </div>
-                                            <p className="text-white text-[14px]">Shopping</p>
-                                        </div>
-                                    </button>
-                                    <button className="w-full h-20 text-gray-400 px-3 py-2 text-[12px] rounded-[5px] border-solid border-gray-400 border hover:text-[#1e90ff] hover:cursor-pointer hover:border-[#0d7ae9]">
-                                        <div className="flex flex-col justify-center items-center gap-1">
-                                            <div className="px-2 py-1 bg-[#1e90ff]/20 rounded-[5px] text-[#1e90ff] text-[20px]">
-                                                <FontAwesomeIcon icon={faBowlFood} />
-                                            </div>
-                                            <p className="text-white text-[14px]">Food</p>
-                                        </div>
-                                    </button>
-                                    <button className="w-full h-20 text-gray-400 px-3 py-2 text-[12px] rounded-[5px] border-solid border-gray-400 border hover:text-[#1e90ff] hover:cursor-pointer hover:border-[#0d7ae9]">
-                                        <div className="flex flex-col justify-center items-center gap-1">
-                                            <div className="px-2 py-1 bg-[#1e90ff]/20 rounded-[5px] text-[#1e90ff] text-[20px]">
-                                                <FontAwesomeIcon icon={faGasPump} />
-                                            </div>
-                                            <p className="text-white text-[14px]">Transport</p>
-                                        </div>
-                                    </button>
-                                    <button className="w-full h-20 text-gray-400 px-3 py-2 text-[12px] rounded-[5px] border-solid border-gray-400 border hover:text-[#1e90ff] hover:cursor-pointer hover:border-[#0d7ae9]">
-                                        <div className="flex flex-col justify-center items-center gap-1">
-                                            <div className="px-2 py-1 bg-[#1e90ff]/20 rounded-[5px] text-[#1e90ff] text-[20px]">
-                                                <FontAwesomeIcon icon={faEllipsis} />
-                                            </div>
-                                            <p className="text-white text-[14px]">Other</p>
-                                        </div>
-                                    </button>
+                                        </button>
+                                    ))}
                                 </div>
                             </div>
                             <div className="w-full border-b-2 border-gray-600"></div>
                             <div className="w-full flex flex-row justify-end items-center gap-4 mt-2">
                                 <button className="text-gray-400 px-3 py-2 text-[12px] rounded-[5px] border-solid border-gray-400 border hover:text-[#1e90ff] hover:cursor-pointer hover:border-[#0d7ae9]">Cancel</button>
-                                <button className="bg-[#1e90ff] text-white px-3 py-2 text-[12px] rounded-[5px] hover:bg-[#0d7ae9] hover:cursor-pointer"><FontAwesomeIcon icon={faPlus} /> Add Expense</button>
+                                <button className="bg-[#1e90ff] text-white px-3 py-2 text-[12px] rounded-[5px] hover:bg-[#0d7ae9] hover:cursor-pointer" onClick={addExpense}><FontAwesomeIcon icon={faPlus} /> Add Expense</button>
                             </div>
                         </div>
                     </div>
@@ -216,34 +226,23 @@ export default function AddExpense() {
                             </div>
                             <div className="w-full flex flex-col gap-4 mt-2">
                                 <div className="w-full flex flex-col gap-2">
-                                    <div className="w-full flex flex-row justify-between items-center">
-                                        <div className="flex flex-row justify-center items-center gap-3">
-                                            <div className="px-2 py-1 bg-[#1e90ff]/20 rounded-[5px] text-[#1e90ff] text-[20px]">
-                                                <FontAwesomeIcon icon={faCartShopping} />
+                                    {expenses.map((expense) => (
+                                        <div className="w-full flex flex-col gap-2" key={expense.id}>
+                                            <div className="w-full flex flex-row justify-between items-center">
+                                                <div className="flex flex-row justify-center items-center gap-3">
+                                                    <div className="px-2 py-1 bg-[#1e90ff]/20 rounded-[5px] text-[#1e90ff] text-[20px]">
+                                                        <FontAwesomeIcon icon={faGasPump} />
+                                                    </div>
+                                                    <div className="w-full flex flex-col justify-center items-start">
+                                                        <p className="text-white text-[14px]">{expense.location}</p>
+                                                        <p className="text-gray-400 text-[12px]">{expenseFormatter.format(new Date(expense.spent_on))} - {expense.category.charAt(0).toUpperCase() + expense.category.slice(1).toLowerCase()}</p>
+                                                    </div>
+                                                </div>
+                                                <p className="text-red-500 text-[14px] font-bold">${expense.amount.toFixed(2)}</p>
                                             </div>
-                                            <div className="w-full flex flex-col justify-center items-start">
-                                                <p className="text-white text-[14px]">Whole Foods Market</p>
-                                                <p className="text-gray-400 text-[12px]">Groceries - September 18</p>
-                                            </div>
+                                            <div className="w-full border-b-2 border-gray-400"></div>
                                         </div>
-                                        <p className="text-red-500 text-[14px] font-bold">- $84.20</p>
-                                    </div>
-                                    <div className="w-full border-b-2 border-gray-400"></div>
-                                </div>
-                                <div className="w-full flex flex-col gap-2">
-                                    <div className="w-full flex flex-row justify-between items-center">
-                                        <div className="flex flex-row justify-center items-center gap-3">
-                                            <div className="px-2 py-1 bg-[#1e90ff]/20 rounded-[5px] text-[#1e90ff] text-[20px]">
-                                                <FontAwesomeIcon icon={faGasPump} />
-                                            </div>
-                                            <div className="w-full flex flex-col justify-center items-start">
-                                                <p className="text-white text-[14px]">Shell Gas Station</p>
-                                                <p className="text-gray-400 text-[12px]">Transportation - September 14</p>
-                                            </div>
-                                        </div>
-                                        <p className="text-red-500 text-[14px] font-bold">- $51.34</p>
-                                    </div>
-                                    <div className="w-full border-b-2 border-gray-400"></div>
+                                    ))}
                                 </div>
                             </div>
                         </div>
