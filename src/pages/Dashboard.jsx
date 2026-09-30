@@ -292,7 +292,9 @@ export default function Dashboard() {
                         <div className="w-full h-80 border-solid border-gray-600 border px-6 py-4 bg-[rgb(5,21,49)] rounded-[5px] flex flex-col items-start gap-1">
                             <div className="w-full flex flex-row justify-between items-center">
                                 <p className="text-white text-[18px] font-bold">Recent Transactions</p>
-                                <p className="text-[#1e90ff] text-[14px] font-bold hover:text-[#0d7ae9] hover:cursor-pointer">View All <FontAwesomeIcon icon={faArrowRight} /></p>
+                                <Link to="/expenses">
+                                    <p className="text-[#1e90ff] text-[14px] font-bold hover:text-[#0d7ae9] hover:cursor-pointer">View All <FontAwesomeIcon icon={faArrowRight} /></p>
+                                </Link>
                             </div>
                             <div className="w-full flex flex-col gap-4 mt-2">
                                 <div className="w-full flex flex-col gap-2">

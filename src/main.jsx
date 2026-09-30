@@ -5,6 +5,7 @@ import App from './pages/App.jsx'
 import Join from './pages/Join.jsx'
 import Dashboard from './pages/Dashboard.jsx'
 import AddExpense from './pages/AddExpense.jsx'
+import Expenses from './pages/Expenses.jsx'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
 const router = createBrowserRouter([
@@ -23,6 +24,10 @@ const router = createBrowserRouter([
   {
     path: "/add-expense",
     element: <AddExpense />
+  },
+  {
+    path: "/expenses",
+    element: <Expenses />
   }
 ])
 
