@@ -7,9 +7,39 @@ import { faGasPump } from "@fortawesome/free-solid-svg-icons";
 import { faBagShopping } from "@fortawesome/free-solid-svg-icons";
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { supabase } from "../lib/supabaseClient";
 
 export default function Expenses() {
+    const expenseFormatter = new Intl.DateTimeFormat('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+        timeZone: 'UTC'
+    });
+
+    const [expenses, setExpenses] = useState([]);
+    const icons = {
+        "income": faCoins,
+        "groceries": faBagShopping,
+        "shopping": faCartShopping,
+        "food": faBowlFood,
+        "transport": faGasPump,
+        "other": faEllipsis
+    }
+
+    useEffect(() => {
+        fetchExpenses();
+    }, []);
+
+    async function fetchExpenses() {
+        let { data, error } = await supabase.from('expenses').select('*').order('created_at', { ascending: false });
+        if (error) {
+            console.log("Error fetching expenses: ", error.message);
+            return;
+        }
+        setExpenses(data);
+    }
 
     return (
         <div className="w-full mb-15">
@@ -25,68 +55,23 @@ export default function Expenses() {
                             </Link>
                         </div>
                         <div className="w-full flex flex-col gap-4 mt-2">
-                            <div className="w-full flex flex-col gap-2">
-                                <div className="w-full flex flex-row justify-between items-center">
-                                    <div className="flex flex-row justify-center items-center gap-3">
-                                        <div className="px-2 py-1 bg-[#1e90ff]/20 rounded-[5px] text-[#1e90ff] text-[20px]">
-                                            <FontAwesomeIcon icon={faCartShopping} />
+                            {expenses.map((expense) => (
+                                <div className="w-full flex flex-col gap-2" key={expense.id}>
+                                    <div className="w-full flex flex-row justify-between items-center">
+                                        <div className="flex flex-row justify-center items-center gap-3">
+                                            <div className="px-2 py-1 bg-[#1e90ff]/20 rounded-[5px] text-[#1e90ff] text-[20px]">
+                                                <FontAwesomeIcon icon={icons[expense.category]} />
+                                            </div>
+                                            <div className="w-full flex flex-col justify-center items-start">
+                                                <p className="text-white text-[14px]">{expense.location}</p>
+                                                <p className="text-gray-400 text-[12px]">{expenseFormatter.format(new Date(expense.spent_on))} - {expense.category.charAt(0).toUpperCase() + expense.category.slice(1)}</p>
+                                            </div>
                                         </div>
-                                        <div className="w-full flex flex-col justify-center items-start">
-                                            <p className="text-white text-[14px]">Whole Foods Market</p>
-                                            <p className="text-gray-400 text-[12px]">Groceries - September 18</p>
-                                        </div>
+                                        <p className="text-[14px] font-bold" style={{ color: expense.category === "income" ? "#7CFC00" : "#FF0000" }}>{expense.category === "income" ? "+" : "-"} ${expense.amount.toFixed(2)}</p>
                                     </div>
-                                    <p className="text-red-500 text-[14px] font-bold">- $84.20</p>
+                                    <div className="w-full border-b-2 border-gray-400"></div>
                                 </div>
-                                <div className="w-full border-b-2 border-gray-400"></div>
-                            </div>
-
-                            <div className="w-full flex flex-col gap-2">
-                                <div className="w-full flex flex-row justify-between items-center">
-                                    <div className="flex flex-row justify-center items-center gap-3">
-                                        <div className="px-2 py-1 bg-[#1e90ff]/20 rounded-[5px] text-[#1e90ff] text-[20px]">
-                                            <FontAwesomeIcon icon={faCoins} />
-                                        </div>
-                                        <div className="w-full flex flex-col justify-center items-start">
-                                            <p className="text-white text-[14px]">Paycheck</p>
-                                            <p className="text-gray-400 text-[12px]">Income - September 15</p>
-                                        </div>
-                                    </div>
-                                    <p className="text-green-500 text-[14px] font-bold">+ $2421.20</p>
-                                </div>
-                                <div className="w-full border-b-2 border-gray-400"></div>
-                            </div>
-
-                            <div className="w-full flex flex-col gap-2">
-                                <div className="w-full flex flex-row justify-between items-center">
-                                    <div className="flex flex-row justify-center items-center gap-3">
-                                        <div className="px-2 py-1 bg-[#1e90ff]/20 rounded-[5px] text-[#1e90ff] text-[20px]">
-                                            <FontAwesomeIcon icon={faGasPump} />
-                                        </div>
-                                        <div className="w-full flex flex-col justify-center items-start">
-                                            <p className="text-white text-[14px]">Shell Gas Station</p>
-                                            <p className="text-gray-400 text-[12px]">Transportation - September 14</p>
-                                        </div>
-                                    </div>
-                                    <p className="text-red-500 text-[14px] font-bold">- $51.34</p>
-                                </div>
-                                <div className="w-full border-b-2 border-gray-400"></div>
-                            </div>
-                            <div className="w-full flex flex-col gap-2">
-                                <div className="w-full flex flex-row justify-between items-center">
-                                    <div className="flex flex-row justify-center items-center gap-3">
-                                        <div className="px-2 py-1 bg-[#1e90ff]/20 rounded-[5px] text-[#1e90ff] text-[20px]">
-                                            <FontAwesomeIcon icon={faBowlFood} />
-                                        </div>
-                                        <div className="w-full flex flex-col justify-center items-start">
-                                            <p className="text-white text-[14px]">Chipotle</p>
-                                            <p className="text-gray-400 text-[12px]">Food - September 11</p>
-                                        </div>
-                                    </div>
-                                    <p className="text-red-500 text-[14px] font-bold">- $18.75</p>
-                                </div>
-                                <div className="w-full border-b-2 border-gray-400"></div>
-                            </div>
+                            ))}
                         </div>
                     </div>
                 </div>
