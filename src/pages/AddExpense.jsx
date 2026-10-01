@@ -22,7 +22,8 @@ export default function AddExpense() {
     const expenseFormatter = new Intl.DateTimeFormat('en-US', {
         month: 'short',
         day: 'numeric',
-        year: 'numeric'
+        year: 'numeric',
+        timeZone: 'UTC'
     });
     const items = [
         { key: "income", label: "Income", icon: faCoins },
@@ -32,6 +33,14 @@ export default function AddExpense() {
         { key: "transport", label: "Transport", icon: faGasPump },
         { key: "other", label: "Other", icon: faEllipsis }
     ];
+    const icons = {
+        "income": faCoins,
+        "groceries": faBagShopping,
+        "shopping": faCartShopping,
+        "food": faBowlFood,
+        "transport": faGasPump,
+        "other": faEllipsis
+    };
 
     const [isAccessingAccount, setIsAccessingAccount] = useState(false);
     const isSubmitting = useRef(false);
@@ -231,14 +240,14 @@ export default function AddExpense() {
                                             <div className="w-full flex flex-row justify-between items-center">
                                                 <div className="flex flex-row justify-center items-center gap-3">
                                                     <div className="px-2 py-1 bg-[#1e90ff]/20 rounded-[5px] text-[#1e90ff] text-[20px]">
-                                                        <FontAwesomeIcon icon={faGasPump} />
+                                                        <FontAwesomeIcon icon={icons[expense.category]} />
                                                     </div>
                                                     <div className="w-full flex flex-col justify-center items-start">
                                                         <p className="text-white text-[14px]">{expense.location}</p>
                                                         <p className="text-gray-400 text-[12px]">{expenseFormatter.format(new Date(expense.spent_on))} - {expense.category.charAt(0).toUpperCase() + expense.category.slice(1).toLowerCase()}</p>
                                                     </div>
                                                 </div>
-                                                <p className="text-red-500 text-[14px] font-bold">${expense.amount.toFixed(2)}</p>
+                                                <p className="text-[14px] font-bold" style={{ color: expense.category === "income" ? "#7CFC00" : "#FF0000" }}>{expense.category === "income" ? "+" : "-"} ${expense.amount.toFixed(2)}</p>
                                             </div>
                                             <div className="w-full border-b-2 border-gray-400"></div>
                                         </div>

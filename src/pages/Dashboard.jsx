@@ -4,9 +4,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
+import { faBagShopping } from "@fortawesome/free-solid-svg-icons";
 import { faCoins } from "@fortawesome/free-solid-svg-icons";
 import { faGasPump } from "@fortawesome/free-solid-svg-icons";
 import { faBowlFood } from "@fortawesome/free-solid-svg-icons";
+import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
 import { faX } from "@fortawesome/free-solid-svg-icons";
 import { faArrowRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
@@ -22,6 +24,22 @@ export default function Dashboard() {
         month: 'long',
         year: 'numeric'
     });
+    const expenseFormatter = new Intl.DateTimeFormat('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+        timeZone: 'UTC'
+    });
+
+    const icons = {
+        "income": faCoins,
+        "groceries": faBagShopping,
+        "shopping": faCartShopping,
+        "food": faBowlFood,
+        "transport": faGasPump,
+        "other": faEllipsis
+    };
+
     const [isEditingBudget, setIsEditingBudget] = useState(false);
     const [isAccessingAccount, setIsAccessingAccount] = useState(false);
     const isSubmitting = useRef(false);
@@ -33,6 +51,7 @@ export default function Dashboard() {
     const [totalBalance, setTotalBalance] = useState("");
     const [monthlyBudget, setMonthlyBudget] = useState("");
     const [financialSummary, setFinancialSummary] = useState([]);
+    const [expenses, setExpenses] = useState([]);
 
     const navigate = useNavigate();
 
@@ -40,6 +59,7 @@ export default function Dashboard() {
         window.scrollTo(0, 0);
         fetchUser();
         fetchFinancialSummary();
+        fetchExpenses();
     }, []);
 
     async function fetchUser() {
@@ -60,6 +80,15 @@ export default function Dashboard() {
             return;
         }
         setFinancialSummary(accounts);
+    }
+
+    async function fetchExpenses() {
+        let { data, error } = await supabase.from('expenses').select('*').order('created_at', { ascending: false }).limit(4);
+        if (error) {
+            console.log("Error fetching expenses: ", error.message);
+            return;
+        }
+        setExpenses(data);
     }
 
     async function signOut() {
@@ -295,69 +324,25 @@ export default function Dashboard() {
                                     <p className="text-[#1e90ff] text-[14px] font-bold hover:text-[#0d7ae9] hover:cursor-pointer">View All <FontAwesomeIcon icon={faArrowRight} /></p>
                                 </Link>
                             </div>
+                            
                             <div className="w-full flex flex-col gap-4 mt-2">
-                                <div className="w-full flex flex-col gap-2">
-                                    <div className="w-full flex flex-row justify-between items-center">
-                                        <div className="flex flex-row justify-center items-center gap-3">
-                                            <div className="px-2 py-1 bg-[#1e90ff]/20 rounded-[5px] text-[#1e90ff] text-[20px]">
-                                                <FontAwesomeIcon icon={faCartShopping} />
+                                {expenses.map((expense) => (
+                                    <div className="w-full flex flex-col gap-2" key={expense.id}>
+                                        <div className="w-full flex flex-row justify-between items-center">
+                                            <div className="flex flex-row justify-center items-center gap-3">
+                                                <div className="px-2 py-1 bg-[#1e90ff]/20 rounded-[5px] text-[#1e90ff] text-[20px]">
+                                                    <FontAwesomeIcon icon={icons[expense.category]} />
+                                                </div>
+                                                <div className="w-full flex flex-col justify-center items-start">
+                                                    <p className="text-white text-[14px]">{expense.location}</p>
+                                                    <p className="text-gray-400 text-[12px]">{expenseFormatter.format(new Date(expense.spent_on))} - {expense.category.charAt(0).toUpperCase() + expense.category.slice(1)}</p>
+                                                </div>
                                             </div>
-                                            <div className="w-full flex flex-col justify-center items-start">
-                                                <p className="text-white text-[14px]">Whole Foods Market</p>
-                                                <p className="text-gray-400 text-[12px]">Groceries - September 18</p>
-                                            </div>
+                                            <p className="text-[14px] font-bold" style={{ color: expense.category === "income" ? "#7CFC00" : "#FF0000" }}>{expense.category === "income" ? "+" : "-"} ${expense.amount.toFixed(2)}</p>
                                         </div>
-                                        <p className="text-red-500 text-[14px] font-bold">- $84.20</p>
+                                        <div className="w-full border-b-2 border-gray-400"></div>
                                     </div>
-                                    <div className="w-full border-b-2 border-gray-400"></div>
-                                </div>
-
-                                <div className="w-full flex flex-col gap-2">
-                                    <div className="w-full flex flex-row justify-between items-center">
-                                        <div className="flex flex-row justify-center items-center gap-3">
-                                            <div className="px-2 py-1 bg-[#1e90ff]/20 rounded-[5px] text-[#1e90ff] text-[20px]">
-                                                <FontAwesomeIcon icon={faCoins} />
-                                            </div>
-                                            <div className="w-full flex flex-col justify-center items-start">
-                                                <p className="text-white text-[14px]">Paycheck</p>
-                                                <p className="text-gray-400 text-[12px]">Income - September 15</p>
-                                            </div>
-                                        </div>
-                                        <p className="text-green-500 text-[14px] font-bold">+ $2421.20</p>
-                                    </div>
-                                    <div className="w-full border-b-2 border-gray-400"></div>
-                                </div>
-
-                                <div className="w-full flex flex-col gap-2">
-                                    <div className="w-full flex flex-row justify-between items-center">
-                                        <div className="flex flex-row justify-center items-center gap-3">
-                                            <div className="px-2 py-1 bg-[#1e90ff]/20 rounded-[5px] text-[#1e90ff] text-[20px]">
-                                                <FontAwesomeIcon icon={faGasPump} />
-                                            </div>
-                                            <div className="w-full flex flex-col justify-center items-start">
-                                                <p className="text-white text-[14px]">Shell Gas Station</p>
-                                                <p className="text-gray-400 text-[12px]">Transportation - September 14</p>
-                                            </div>
-                                        </div>
-                                        <p className="text-red-500 text-[14px] font-bold">- $51.34</p>
-                                    </div>
-                                    <div className="w-full border-b-2 border-gray-400"></div>
-                                </div>
-                                <div className="w-full flex flex-col gap-2">
-                                    <div className="w-full flex flex-row justify-between items-center">
-                                        <div className="flex flex-row justify-center items-center gap-3">
-                                            <div className="px-2 py-1 bg-[#1e90ff]/20 rounded-[5px] text-[#1e90ff] text-[20px]">
-                                                <FontAwesomeIcon icon={faBowlFood} />
-                                            </div>
-                                            <div className="w-full flex flex-col justify-center items-start">
-                                                <p className="text-white text-[14px]">Chipotle</p>
-                                                <p className="text-gray-400 text-[12px]">Food - September 11</p>
-                                            </div>
-                                        </div>
-                                        <p className="text-red-500 text-[14px] font-bold">- $18.75</p>
-                                    </div>
-                                    <div className="w-full border-b-2 border-gray-400"></div>
-                                </div>
+                                ))}
                             </div>
                         </div>
                     </div>
