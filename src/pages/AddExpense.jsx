@@ -43,6 +43,7 @@ export default function AddExpense() {
     };
 
     const [isAccessingAccount, setIsAccessingAccount] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
     const isSubmitting = useRef(false);
 
     const [userName, setUserName] = useState("");
@@ -51,12 +52,15 @@ export default function AddExpense() {
     const [location, setLocation] = useState("");
     const [category, setCategory] = useState("");
     const [expenses, setExpenses] = useState([]);
+    const [budget, setBudget] = useState(0);
+    const [expenseTotal, setExpenseTotal] = useState(0);
 
     
     useEffect(() => {
         window.scrollTo(0, 0);
         fetchUser();
         fetchExpenses();
+        fetchBudget();
     }, []);
 
     async function fetchUser() {
@@ -71,12 +75,29 @@ export default function AddExpense() {
     }
 
     async function fetchExpenses() {
-        let { data, error } = await supabase.from('expenses').select('*').limit(2).order('created_at', { ascending: false })
+        let { data, error } = await supabase.from('expenses').select('*').order('created_at', { ascending: false });
+        setIsLoading(false);
         if (error) {
-            console.log(error.message);
+            console.log("Error fetching expenses: ", error.message);
             return;
         }
+        let expenses = 0;
+        data.forEach((item) => {
+            if (item.category !== "income") {
+                expenses += item.amount;
+            }
+        })
+        setExpenseTotal(expenses);
         setExpenses(data);
+    }
+
+    async function fetchBudget() {
+        let { data, error } = await supabase.from('accounts').select('*');
+        if (error) {
+            console.log("Error fetching budget: ", error.message);
+            return;
+        }
+        setBudget(data[0]?.monthly_budget ?? 0);
     }
 
     async function addExpense() {
@@ -221,7 +242,7 @@ export default function AddExpense() {
                     </div>
                     <div className="flex flex-col justify-center items-center px-2 gap-5">
                         <div className="w-125 h-45 border-solid border-gray-600 border p-4 bg-[rgb(5,21,49)] rounded-[5px] flex flex-col justify-center items-center">
-                            <MonthlyBudget />
+                            <MonthlyBudget budget={budget} expenseTotal={expenseTotal} isLoading={isLoading} />
                             <div className="w-full border-b-2 border-gray-600 my-2"></div>
                             <div className="w-full flex flex-row justify-between items-center">
                                 <p className="text-gray-400 text-[14px]">After this expense</p>
@@ -235,7 +256,7 @@ export default function AddExpense() {
                             </div>
                             <div className="w-full flex flex-col gap-4 mt-2">
                                 <div className="w-full flex flex-col gap-2">
-                                    {expenses.map((expense) => (
+                                    {expenses.slice(0, 2).map((expense) => (
                                         <div className="w-full flex flex-col gap-2" key={expense.id}>
                                             <div className="w-full flex flex-row justify-between items-center">
                                                 <div className="flex flex-row justify-center items-center gap-3">
