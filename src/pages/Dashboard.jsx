@@ -52,7 +52,7 @@ export default function Dashboard() {
     const [monthlyBudget, setMonthlyBudget] = useState("");
     const [financialSummary, setFinancialSummary] = useState([]);
     const [expenses, setExpenses] = useState([]);
-
+    
     const navigate = useNavigate();
 
     useEffect(() => {
