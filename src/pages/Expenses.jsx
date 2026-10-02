@@ -47,7 +47,7 @@ export default function Expenses() {
             {/* All Expenses */}
             <div className="w-full max-w-300 m-auto">
                 <div className="py-3 px-2 gap-5">
-                    <div className="w-full h-80 border-solid border-gray-600 border px-6 py-4 bg-[rgb(5,21,49)] rounded-[5px] flex flex-col items-start gap-1">
+                    <div className="w-full h-full border-solid border-gray-600 border px-6 py-4 bg-[rgb(5,21,49)] rounded-[5px] flex flex-col items-start gap-1">
                         <div className="w-full flex flex-row justify-between items-center">
                             <p className="text-white text-[18px] font-bold">Recent Transactions</p>
                             <Link to="/dashboard">

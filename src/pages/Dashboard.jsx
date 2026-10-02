@@ -42,6 +42,7 @@ export default function Dashboard() {
 
     const [isEditingBudget, setIsEditingBudget] = useState(false);
     const [isAccessingAccount, setIsAccessingAccount] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
     const isSubmitting = useRef(false);
 
     const [userEmail, setUserEmail] = useState("");
@@ -52,6 +53,8 @@ export default function Dashboard() {
     const [monthlyBudget, setMonthlyBudget] = useState("");
     const [financialSummary, setFinancialSummary] = useState([]);
     const [expenses, setExpenses] = useState([]);
+    const [expenseTotal, setExpenseTotal] = useState(0);
+    const [incomeTotal, setIncomeTotal] = useState(0);
     
     const navigate = useNavigate();
 
@@ -83,13 +86,25 @@ export default function Dashboard() {
     }
 
     async function fetchExpenses() {
-        let { data, error } = await supabase.from('expenses').select('*').order('created_at', { ascending: false }).limit(4);
+        let { data, error } = await supabase.from('expenses').select('*').order('created_at', { ascending: false });
+        setIsLoading(false);
         if (error) {
             console.log("Error fetching expenses: ", error.message);
             return;
         }
+        let income = 0;
+        let expenses = 0;
+        data.forEach((item) => {
+            if (item.category === "income") {
+                income += item.amount;
+            } else {
+                expenses += item.amount;
+            }
+        })
+        setIncomeTotal(income);
+        setExpenseTotal(expenses);
         setExpenses(data);
-    }
+    };
 
     async function signOut() {
         const { error } = await supabase.auth.signOut();
@@ -308,7 +323,7 @@ export default function Dashboard() {
                                 <IncomeVsExpenses />
                             </div>
                             <div className="w-150 h-30 border-solid border-gray-600 border p-4 bg-[rgb(5,21,49)] rounded-[5px] flex flex-col items-start gap-1">
-                                <MonthlyBudget />
+                                <MonthlyBudget budget={financialSummary[0]?.monthly_budget ?? 0} expenseTotal={expenseTotal} isLoading={isLoading} />
                             </div>
                         </div>
                     </div>
@@ -326,7 +341,7 @@ export default function Dashboard() {
                             </div>
                             
                             <div className="w-full flex flex-col gap-4 mt-2">
-                                {expenses.map((expense) => (
+                                {expenses.slice(0, 4).map((expense) => (
                                     <div className="w-full flex flex-col gap-2" key={expense.id}>
                                         <div className="w-full flex flex-row justify-between items-center">
                                             <div className="flex flex-row justify-center items-center gap-3">
