@@ -55,6 +55,7 @@ export default function Dashboard() {
     const [expenses, setExpenses] = useState([]);
     const [expenseTotal, setExpenseTotal] = useState(0);
     const [incomeTotal, setIncomeTotal] = useState(0);
+    const [savingsRate, setSavingsRate] = useState(0);
     
     const navigate = useNavigate();
 
@@ -104,6 +105,7 @@ export default function Dashboard() {
         setIncomeTotal(income);
         setExpenseTotal(expenses);
         setExpenses(data);
+        setSavingsRate(income !== 0 ? (((income - expenses) / income) * 100).toFixed(0) : 0);
     };
 
     async function signOut() {
@@ -304,7 +306,7 @@ export default function Dashboard() {
                 {/*User Financial Overview Section*/}
                 <div className="w-full max-w-300 m-auto">
                     <div className="flex flex-row justify-center items-center py-3 px-2 gap-5">
-                        <FinancialOverview financialSummary={financialSummary} />
+                        <FinancialOverview financialSummary={financialSummary} incomeTotal={incomeTotal} expenseTotal={expenseTotal} savingsRate={savingsRate} />
                     </div>
                 </div>
 
