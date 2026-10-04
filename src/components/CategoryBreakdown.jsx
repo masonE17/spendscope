@@ -1,32 +1,49 @@
 import { Pie, PieChart, Cell } from 'recharts';
 
-const sampleCategories = [
-    { name: 'Rent', value: 1500, color: '#1e90ff' },
-    { name: 'Groceries', value: 620, color: '#38bdf8' },
-    { name: 'Dining', value: 380, color: '#7dd3fc' },
-    { name: 'Transport', value: 260, color: '#a78bfa' },
-    { name: 'Entertainment', value: 200, color: '#34d399' },
-    { name: 'Other', value: 160, color: '#64748b' },
-];
+export default function CategoryBreakdown({ expenses, expenseTotal }) {
+    const totals = {
+        groceries: 0,
+        shopping: 0,
+        food: 0,
+        transport: 0,
+        other: 0
+    }
 
-const formatMoney = (n) => `$${n.toLocaleString('en-US')}`;
+    expenses.map((expense) => {
+        if (expense.category in totals) {
+            totals[expense.category] += expense.amount;
+        }
+    });
 
-export default function CategoryBreakdown({ data = sampleCategories }) {
-    const total = data.reduce((sum, d) => sum + d.value, 0);
+    const expensesData = [
+        { name: 'Groceries', value: totals.groceries },
+        { name: 'Shopping', value: totals.shopping },
+        { name: 'Food', value: totals.food },
+        { name: 'Transport', value: totals.transport },
+        { name: 'Other', value: totals.other }
+    ];
+
+    const iconColors = {
+        "groceries": '#34d399',
+        "shopping": '#38bdf8',
+        "food": '#a78bfa',
+        "transport": '#7dd3fc',
+        "other": '#64748b'
+    };
 
     return (
         <div className="flex flex-row items-center gap-4 m-auto">
             <PieChart width={220} height={220}>
                 <Pie
-                    data={data}
+                    data={expensesData}
                     dataKey="value"
                     nameKey="name"
                     innerRadius="50%"
                     outerRadius="90%"
                     stroke="none"
                 >
-                    {data.map((d) => (
-                        <Cell key={d.name} fill={d.color} />
+                    {expensesData.map((expense) => (
+                        <Cell key={expense.name} fill={iconColors[expense.name.toLowerCase()]} />
                     ))}
                 </Pie>
             </PieChart>
@@ -34,15 +51,15 @@ export default function CategoryBreakdown({ data = sampleCategories }) {
             <div className="flex flex-col gap-2 p-3">
             <div className="flex flex-col pb-3 mb-1 border-b-2 border-gray-400">
                 <p className="text-gray-400 text-[12px]">TOTAL SPENT</p>
-                <p className="text-white text-[28px] font-bold">{formatMoney(total)}</p>
+                <p className="text-white text-[28px] font-bold">{ expenseTotal ? expenseTotal.toLocaleString("en-US", { style: "currency", currency: "USD" }) : "..."}</p>
             </div>
             <ul className="flex flex-col gap-2 text-[13px]">
-                {data.map((d) => (
-                    <li key={d.name} className="flex flex-row items-center gap-3">
-                        <span className="w-2 h-2 rounded-full" style={{ backgroundColor: d.color }}></span>
-                        <span className="w-28 text-white">{d.name}</span>
-                        <span className="w-10 text-white font-bold text-right">{Math.round((d.value / total) * 100)}%</span>
-                        <span className="w-14 text-gray-400 text-right">{formatMoney(d.value)}</span>
+                {expensesData.map((expense) => (
+                    <li key={expense.name} className="flex flex-row items-center gap-3">
+                        <span className="w-2 h-2 rounded-full" style={{ backgroundColor: iconColors[expense.name.toLowerCase()] }}></span>
+                        <span className="w-28 text-white">{expense.name}</span>
+                        <span className="w-10 text-white font-bold text-right">{ expenseTotal ? Math.round((expense.value / expenseTotal) * 100) : "..." }%</span>
+                        <span className="w-14 text-gray-400 text-right">{ expenseTotal ? (expense.value).toLocaleString("en-US", { style: "currency", currency: "USD" }) : "..."}</span>
                     </li>
                 ))}
             </ul>

@@ -316,7 +316,7 @@ export default function Dashboard() {
                         <div className="w-150 h-95 border-solid border-gray-600 border p-4 bg-[rgb(5,21,49)] rounded-[5px] flex flex-col items-start gap-1">
                             <p className="text-white text-[18px] font-bold">Category Breakdown</p>
                             <p className="text-gray-400 text-[14px] -mt-1 mb-3">{ formatter.format(date) }</p>
-                            <CategoryBreakdown />
+                            <CategoryBreakdown expenses={expenses} expenseTotal={expenseTotal} />
                         </div>
                         <div className="flex flex-col justify-center items-center gap-5">
                             <div className="w-150 h-60 border-solid border-gray-600 border p-4 bg-[rgb(5,21,49)] rounded-[5px] flex flex-col items-start gap-1">
