@@ -246,13 +246,15 @@ export default function AddExpense() {
                             <div className="w-full border-b-2 border-gray-600 my-2"></div>
                             <div className="w-full flex flex-row justify-between items-center">
                                 <p className="text-gray-400 text-[14px]">After this expense</p>
-                                <p className="text-[#1e90ff] text-[14px] font-bold">ONCHANGE TEXT</p>
+                                <p className="text-[#1e90ff] text-[14px] font-bold">${((budget - expenseTotal) - amount).toFixed(2)} remaining</p>
                             </div>
                         </div>
                         <div className="w-125 h-50 border-solid border-gray-600 border p-4 bg-[rgb(5,21,49)] rounded-[5px] flex flex-col items-start gap-1">
                             <div className="w-full flex flex-row justify-between items-center">
                                 <p className="text-white text-[18px] font-bold">Recent Transactions</p>
-                                <p className="text-[#1e90ff] text-[14px] font-bold hover:text-[#0d7ae9] hover:cursor-pointer">View All <FontAwesomeIcon icon={faArrowRight} /></p>
+                                <Link to="/expenses">
+                                    <p className="text-[#1e90ff] text-[14px] font-bold hover:text-[#0d7ae9] hover:cursor-pointer">View All <FontAwesomeIcon icon={faArrowRight} /></p>
+                                </Link>
                             </div>
                             <div className="w-full flex flex-col gap-4 mt-2">
                                 <div className="w-full flex flex-col gap-2">
