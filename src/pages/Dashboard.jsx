@@ -322,7 +322,7 @@ export default function Dashboard() {
                             <div className="w-150 h-60 border-solid border-gray-600 border p-4 bg-[rgb(5,21,49)] rounded-[5px] flex flex-col items-start gap-1">
                                 <p className="text-white text-[18px] font-bold">Income vs. Expenses</p>
                                 <p className="text-gray-400 text-[14px] -mt-1 mb-3">Last 6 months</p>
-                                <IncomeVsExpenses />
+                                <IncomeVsExpenses expenses={expenses} budget={financialSummary[0]?.monthly_budget ?? 0} />
                             </div>
                             <div className="w-150 h-30 border-solid border-gray-600 border p-4 bg-[rgb(5,21,49)] rounded-[5px] flex flex-col items-start gap-1">
                                 <MonthlyBudget budget={financialSummary[0]?.monthly_budget ?? 0} expenseTotal={expenseTotal} isLoading={isLoading} />

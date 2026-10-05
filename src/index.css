@@ -31,3 +31,7 @@ html, body {
         }
     }
 }
+
+.recharts-wrapper *:focus {
+    outline: none;
+}
