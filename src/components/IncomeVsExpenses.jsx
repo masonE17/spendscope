@@ -1,48 +1,70 @@
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ReferenceLine, ResponsiveContainer } from 'recharts';
 
-const sampleMonths = [
-    { month: 'Apr', income: 5000, expenses: 3300 },
-    { month: 'May', income: 5000, expenses: 3450 },
-    { month: 'Jun', income: 5100, expenses: 3000 },
-    { month: 'Jul', income: 5100, expenses: 3250 },
-    { month: 'Aug', income: 5200, expenses: 3400 },
-    { month: 'Sep', income: 5200, expenses: 3120 },
-];
+const formatMoney = (n) => n.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
 
-const formatMoney = (n) => `$${n.toLocaleString('en-US')}`;
+const categoryColors = {
+    "groceries": '#34d399',
+    "shopping": '#38bdf8',
+    "food": '#a78bfa',
+    "transport": '#7dd3fc',
+    "other": '#64748b'
+};
 
 function ChartTooltip({ active, payload, label }) {
     if (!active || !payload?.length) return null;
-    const { income, expenses } = payload[0].payload;
+    const { value } = payload[0].payload;
 
     return (
         <div className="bg-[rgb(0,12,31)] border border-gray-600 rounded-[5px] p-2 text-[12px] flex flex-col gap-1">
             <p className="text-white font-bold">{label}</p>
-            <p className="text-gray-400">Income: <span className="text-green-500">{formatMoney(income)}</span></p>
-            <p className="text-gray-400">Expenses: <span className="text-[#1e90ff]">{formatMoney(expenses)}</span></p>
+            <p className="text-gray-400">Spent: <span className="text-[#1e90ff]">{formatMoney(value)}</span></p>
         </div>
     );
 }
 
-export default function IncomeVsExpenses({ data = sampleMonths }) {
+export default function IncomeVsExpenses({ expenses, budget }) {
+    const totals = {
+        groceries: 0,
+        shopping: 0,
+        food: 0,
+        transport: 0,
+        other: 0
+    };
+
+    expenses.forEach((expense) => {
+        if (expense.category in totals) {
+            totals[expense.category] += expense.amount;
+        }
+    });
+
+    const data = Object.entries(totals).map(([category, value]) => ({
+        key: category,
+        name: category.charAt(0).toUpperCase() + category.slice(1),
+        value
+    }));
+
     return (
         <div className="w-full flex-1 min-h-0">
             <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={data} margin={{ top: 5, right: 0, left: 0, bottom: 5 }}>
+                <BarChart data={data} margin={{ top: 5, right: 0, left: 0, bottom: 5 }}>
                     <CartesianGrid vertical={false} stroke="#ffffff1a" />
-                    <XAxis dataKey="month" padding={{ left: 10, right: 10 }} tick={{ fill: '#9ca3af', fontSize: 11 }} axisLine={false} tickLine={false} />
+                    <XAxis dataKey="name" tick={{ fill: '#9ca3af', fontSize: 11 }} axisLine={false} tickLine={false} />
                     <YAxis
                         width={40}
+                        domain={[0, (dataMax) => Math.max(budget, dataMax)]}
                         tick={{ fill: '#9ca3af', fontSize: 11 }}
-                        tickFormatter={(v) => `$${v / 1000}k`}
+                        tickFormatter={(v) => `$${v >= 1000 ? `${v / 1000}k` : v}`}
                         axisLine={false}
                         tickLine={false}
                     />
-                    <Tooltip content={<ChartTooltip />} cursor={{ stroke: '#ffffff33' }} />
-                    <Legend iconType="circle" iconSize={8} wrapperStyle={{ fontSize: 11, color: '#9ca3af' }} />
-                    <Line type="monotone" dataKey="income" name="Income" stroke="#22c55e" strokeWidth={2} dot={true} />
-                    <Line type="monotone" dataKey="expenses" name="Expenses" stroke="#1e90ff" strokeWidth={2} dot={true} />
-                </LineChart>
+                    <Tooltip content={<ChartTooltip />} cursor={{ fill: '#ffffff0d' }} />
+                    {budget > 0 && <ReferenceLine y={budget} stroke="#22c55e" strokeDasharray="4 4" />}
+                    <Bar dataKey="value" name="Spent" radius={[10, 10, 0, 0]}>
+                        {data.map((entry) => (
+                            <Cell key={entry.key} fill={categoryColors[entry.key]} />
+                        ))}
+                    </Bar>
+                </BarChart>
             </ResponsiveContainer>
         </div>
     );
