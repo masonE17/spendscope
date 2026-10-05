@@ -315,13 +315,13 @@ export default function Dashboard() {
                     <div className="flex flex-row justify-center items-center py-3 px-2 gap-5">
                         <div className="w-150 h-95 border-solid border-gray-600 border p-4 bg-[rgb(5,21,49)] rounded-[5px] flex flex-col items-start gap-1">
                             <p className="text-white text-[18px] font-bold">Category Breakdown</p>
-                            <p className="text-gray-400 text-[14px] -mt-1 mb-3">{ formatter.format(date) }</p>
+                            <p className="text-gray-400 text-[14px] -mt-1 mb-3">Where your money went this month</p>
                             <CategoryBreakdown expenses={expenses} expenseTotal={expenseTotal} />
                         </div>
                         <div className="flex flex-col justify-center items-center gap-5">
                             <div className="w-150 h-60 border-solid border-gray-600 border p-4 bg-[rgb(5,21,49)] rounded-[5px] flex flex-col items-start gap-1">
                                 <p className="text-white text-[18px] font-bold">Income vs. Expenses</p>
-                                <p className="text-gray-400 text-[14px] -mt-1 mb-3">Last 6 months</p>
+                                <p className="text-gray-400 text-[14px] -mt-1 mb-3">How your spending compares to your budget</p>
                                 <IncomeVsExpenses expenses={expenses} budget={financialSummary[0]?.monthly_budget ?? 0} />
                             </div>
                             <div className="w-150 h-30 border-solid border-gray-600 border p-4 bg-[rgb(5,21,49)] rounded-[5px] flex flex-col items-start gap-1">
