@@ -6,6 +6,7 @@ import { faBowlFood } from "@fortawesome/free-solid-svg-icons";
 import { faGasPump } from "@fortawesome/free-solid-svg-icons";
 import { faBagShopping } from "@fortawesome/free-solid-svg-icons";
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
+import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabaseClient";
@@ -41,6 +42,15 @@ export default function Expenses() {
         setExpenses(data);
     }
 
+    async function handleDelete(id) {
+        const { error } = await supabase.from('expenses').delete().eq('id', id);
+        if (error) {
+            console.log("Error deleting expense: ", error.message);
+            return;
+        }
+        fetchExpenses();
+    }
+
     return (
         <div className="w-full mb-15">
 
@@ -67,7 +77,10 @@ export default function Expenses() {
                                                 <p className="text-gray-400 text-[12px]">{expenseFormatter.format(new Date(expense.spent_on))} - {expense.category.charAt(0).toUpperCase() + expense.category.slice(1)}</p>
                                             </div>
                                         </div>
-                                        <p className="text-[14px] font-bold" style={{ color: expense.category === "income" ? "#7CFC00" : "#FF0000" }}>{expense.category === "income" ? "+" : "-"} ${expense.amount.toFixed(2)}</p>
+                                        <div className="flex flex-row justify-center items-center gap-5">
+                                            <p className="text-[14px] font-bold" style={{ color: expense.category === "income" ? "#7CFC00" : "#FF0000" }}>{expense.category === "income" ? "+" : "-"} ${expense.amount.toFixed(2)}</p>
+                                            <FontAwesomeIcon icon={faTrashCan} className="text-[#1e90ff] hover:text-[#0d7ae9] cursor-pointer" onClick={() => handleDelete(expense.id)} />
+                                        </div>
                                     </div>
                                     <div className="w-full border-b-2 border-gray-400"></div>
                                 </div>
