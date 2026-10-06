@@ -43,6 +43,7 @@ export default function Dashboard() {
     const [isEditingBudget, setIsEditingBudget] = useState(false);
     const [isAccessingAccount, setIsAccessingAccount] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
+    const [editBudgetError, seteditBudgetError] = useState(false);
     const isSubmitting = useRef(false);
 
     const [userEmail, setUserEmail] = useState("");
@@ -120,19 +121,28 @@ export default function Dashboard() {
         if (isSubmitting.current) {
             return;
         }
-        if (totalBalance === "" || monthlyBudget === "") {
-            console.log("Error: Total balance or monthly budget is empty.");
+        const update = {};
+        if (totalBalance !== "") {
+            if (isNaN(totalBalance)) {
+                seteditBudgetError(true);
+                return;
+            }
+            update.balance = parseFloat(totalBalance).toFixed(2);
+        }
+        if (monthlyBudget !== "") {
+            if (isNaN(monthlyBudget)) {
+                seteditBudgetError(true);
+                return;
+            }
+            update.monthly_budget = parseFloat(monthlyBudget).toFixed(2);
+        }
+        if (Object.keys(update).length === 0) {
+            seteditBudgetError(true);
             return;
         }
-        if (isNaN(totalBalance) || isNaN(monthlyBudget)) {
-            console.log("Error: Total balance or monthly budget is not a number.");
-            return;
-        }
-        const balance = parseFloat(totalBalance).toFixed(2);
-        const budget = parseFloat(monthlyBudget).toFixed(2);
         isSubmitting.current = true;
         if (financialSummary.length > 0) {
-            const { data, error } = await supabase.from('accounts').update({ balance: balance, monthly_budget: budget }).eq('user_id', financialSummary[0].user_id).select();
+            const { data, error } = await supabase.from('accounts').update({ balance: update.balance, monthly_budget: update.monthly_budget }).eq('user_id', financialSummary[0].user_id).select();
             isSubmitting.current = false;
             if (error) {
                 console.log("Error updating account: ", error.message);
@@ -143,7 +153,7 @@ export default function Dashboard() {
             setMonthlyBudget("");
             setIsEditingBudget(false);
         }
-        const { data, error } = await supabase.from('accounts').insert([{ balance: totalBalance, monthly_budget: monthlyBudget},]).select();
+        const { data, error } = await supabase.from('accounts').insert([{ balance: update.balance, monthly_budget: update.monthly_budget},]).select();
         isSubmitting.current = false;
         if (error) {
             console.log("Error updating account: ", error.message);
@@ -237,14 +247,24 @@ export default function Dashboard() {
                         <div className="w-full flex flex-col justify-center items-start gap-1">
                             <p className="text-white text-[18px] font-bold">Edit Budget</p>
                             <p className="text-gray-400 text-[14px] -mt-1 mb-3">Update your balance and month's spending target</p>
-                            <p className="text-gray-400 text-[12px]">TOTAL BALANCE</p>
-                            <input type="text" placeholder="Total balance (e.g. 10000.00)" className="w-full bg-[rgb(5,21,49)] border border-gray-600 rounded-[5px] p-2 text-white mb-3" onChange={(e) => setTotalBalance(e.target.value)} />
-                            <p className="text-gray-400 text-[12px]">MONTHLY BUDGET</p>
-                            <input type="text" placeholder="Monthly budget (e.g. 2500.00)" className="w-full bg-[rgb(5,21,49)] border border-gray-600 rounded-[5px] p-2 text-white" onChange={(e) => setMonthlyBudget(e.target.value)} />
+                            {editBudgetError ? (
+                                <p className="text-red-400 font-bold text-[16px] mb-3 text-center">Error updating budget. Please fill in all fields with valid information.</p>
+                            ) : (
+                                <>
+                                    <p className="text-gray-400 text-[12px]">TOTAL BALANCE</p>
+                                    <input type="text" placeholder="Total balance (e.g. 10000.00)" className="w-full bg-[rgb(5,21,49)] border border-gray-600 rounded-[5px] p-2 text-white mb-3" onChange={(e) => setTotalBalance(e.target.value)} />
+                                    <p className="text-gray-400 text-[12px]">MONTHLY BUDGET</p>
+                                    <input type="text" placeholder="Monthly budget (e.g. 2500.00)" className="w-full bg-[rgb(5,21,49)] border border-gray-600 rounded-[5px] p-2 text-white" onChange={(e) => setMonthlyBudget(e.target.value)} />
+                                </>
+                            )}
                             <div className="w-full border-b-2 border-gray-600 mt-3"></div>
                             <div className="w-full flex flex-row justify-end items-center gap-4 mt-4">
                                 <button className="text-gray-400 px-3 py-2 text-[12px] rounded-[5px] border-solid border-gray-400 border hover:text-[#1e90ff] hover:cursor-pointer hover:border-[#0d7ae9]" onClick={() => setIsEditingBudget(false)}>Cancel</button>
-                                <button className="bg-[#1e90ff] text-white px-3 py-2 text-[12px] rounded-[5px] hover:bg-[#0d7ae9] hover:cursor-pointer" onClick={updateFinancialSummary}>Save</button>
+                                {editBudgetError ? (
+                                    <button className="bg-[#1e90ff] text-white px-3 py-2 text-[12px] rounded-[5px] hover:bg-[#0d7ae9] hover:cursor-pointer" onClick={() => seteditBudgetError(false)}>Redo</button>
+                                ) : (
+                                    <button className="bg-[#1e90ff] text-white px-3 py-2 text-[12px] rounded-[5px] hover:bg-[#0d7ae9] hover:cursor-pointer" onClick={updateFinancialSummary}>Save</button>
+                                )}
                             </div>
                         </div>
                     </div>
@@ -295,7 +315,7 @@ export default function Dashboard() {
                             <p className="text-gray-400 text-[15px]">Welcome back { userName }! Here's where you can manage your finances.</p>
                         </div>
                         <div className="flex flex-row justify-center items-center gap-4">
-                            <button className="text-gray-400 px-3 py-2 text-[12px] rounded-[5px] border-solid border-gray-400 border hover:text-[#1e90ff] hover:cursor-pointer hover:border-[#0d7ae9]" onClick={() => setIsEditingBudget(true)}>Edit Budget</button>
+                            <button className="text-gray-400 px-3 py-2 text-[12px] rounded-[5px] border-solid border-gray-400 border hover:text-[#1e90ff] hover:cursor-pointer hover:border-[#0d7ae9]" onClick={() => {setIsEditingBudget(true); seteditBudgetError(false);}} >Edit Budget</button>
                             <Link to="/add-expense">
                                 <button className="bg-[#1e90ff] text-white px-3 py-2 text-[12px] rounded-[5px] hover:bg-[#0d7ae9] hover:cursor-pointer"><FontAwesomeIcon icon={faPlus} /> Add Expense</button>
                             </Link>
