@@ -43,6 +43,9 @@ export default function AddExpense() {
     };
 
     const [isAccessingAccount, setIsAccessingAccount] = useState(false);
+    const [isAmountError, setIsAmountError] = useState(false);
+    const [isLocationError, setIsLocationError] = useState(false);
+    const [isCategoryError, setIsCategoryError] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const isSubmitting = useRef(false);
 
@@ -103,6 +106,15 @@ export default function AddExpense() {
     async function addExpense() {
         if (isSubmitting.current) {
             return;
+        }
+        if (!amount || isNaN(amount)) {
+            setIsAmountError(true);
+        }
+        if (!location) {
+            setIsLocationError(true);
+        }
+        if (!category) {
+            setIsCategoryError(true);
         }
         isSubmitting.current = true;
         const { error } = await supabase.from('expenses').insert([{ amount: amount, location: location, category: category },]).select()
@@ -204,7 +216,7 @@ export default function AddExpense() {
             {/*Add Expense Section*/}
             <div className="w-full max-w-300 m-auto">
                 <div className="flex flex-row justify-start items-start py-3 px-2 gap-5">
-                    <div className="w-180 h-140 border-solid border-gray-600 border p-4 bg-[rgb(5,21,49)] rounded-[5px] flex flex-col items-start gap-1">
+                    <div className="w-180 h-150 border-solid border-gray-600 border p-4 bg-[rgb(5,21,49)] rounded-[5px] flex flex-col items-start gap-1">
                         <div className="w-full flex flex-col justify-center items-center gap-2">
                             <div className="w-full flex flex-col justify-center items-start gap-1">
                                 <p className="text-white text-[18px] font-bold">Expense Details</p>
@@ -212,17 +224,28 @@ export default function AddExpense() {
                             </div>
                             <div className="w-full flex flex-col justify-center items-start gap-1 mb-1">
                                 <p className="text-gray-400 text-[14px]">Amount</p>
-                                <input type="text" value={amount} placeholder="Enter Amount" className="w-full bg-[rgb(0,12,31)] border border-gray-600 text-white text-[14px] focus:outline-none px-2 py-3 rounded-[5px]" onChange={(e) => setAmount(e.target.value)} />
+                                {isAmountError ? (
+                                    <input type="text" value={amount} placeholder="Error: Please enter a valid amount" className="w-full bg-[rgb(0,12,31)] border border-red-500 placeholder:text-red-500 placeholder:font-bold text-white text-[14px] focus:outline-none px-2 py-3 rounded-[5px]" onChange={(e) => {setAmount(e.target.value); setIsAmountError(false);}} />
+                                ) : (
+                                    <input type="text" value={amount} placeholder="Enter Amount" className="w-full bg-[rgb(0,12,31)] border border-gray-600 text-white text-[14px] focus:outline-none px-2 py-3 rounded-[5px]" onChange={(e) => setAmount(e.target.value)} />
+                                )}
                             </div>
                             <div className="w-full flex flex-col justify-center items-start gap-1 mb-1">
                                 <p className="text-gray-400 text-[14px]">Location</p>
-                                <input type="text" value={location} placeholder="Enter Location" className="w-full bg-[rgb(0,12,31)] border border-gray-600 text-white text-[14px] focus:outline-none px-2 py-3 rounded-[5px]" onChange={(e) => setLocation(e.target.value)} />
+                                {isLocationError ? (
+                                    <input type="text" value={location} placeholder="Error: Please enter a location" className="w-full bg-[rgb(0,12,31)] border border-red-500 placeholder:text-red-500 placeholder:font-bold text-white text-[14px] focus:outline-none px-2 py-3 rounded-[5px]" onChange={(e) => {setLocation(e.target.value); setIsLocationError(false);}} />
+                                ) : (
+                                    <input type="text" value={location} placeholder="Enter Location" className="w-full bg-[rgb(0,12,31)] border border-gray-600 text-white text-[14px] focus:outline-none px-2 py-3 rounded-[5px]" onChange={(e) => {setLocation(e.target.value)} } />
+                                )}
                             </div>
                             <div className="w-full flex flex-col justify-center items-start gap-1 mb-4">
                                 <p className="text-gray-400 text-[14px]">Category</p>
+                                {isCategoryError && (
+                                    <p className="text-red-500 font-bold text-[18px]">Error: Please select a category</p>
+                                )}
                                 <div className="w-full grid grid-cols-3 grid-rows-2 gap-2">
                                     {items.map((item) => (
-                                        <button key={item.key} className="w-full h-20 text-gray-400 px-3 py-2 text-[12px] rounded-[5px] border-solid border-gray-400 border hover:text-[#1e90ff] hover:cursor-pointer hover:border-[#0d7ae9]" onClick={() => setCategory(item.key)} style={{ backgroundColor: category === item.key ? "rgb(0,12,31)" : "transparent", borderColor: category === item.key ? "#1e90ff" : "gray", boxShadow: category === item.key ? "0 0 5px #1e90ff" : "none" }}>
+                                        <button key={item.key} className="w-full h-20 text-gray-400 px-3 py-2 text-[12px] rounded-[5px] border-solid border-gray-400 border hover:text-[#1e90ff] hover:cursor-pointer hover:border-[#0d7ae9]" onClick={() => {setCategory(item.key); setIsCategoryError(false);}} style={{ backgroundColor: category === item.key ? "rgb(0,12,31)" : "transparent", borderColor: category === item.key ? "#1e90ff" : "gray", boxShadow: category === item.key ? "0 0 5px #1e90ff" : "none" }}>
                                             <div className="flex flex-col justify-center items-center gap-1">
                                                 <div className="px-2 py-1 bg-[#1e90ff]/20 rounded-[5px] text-[#1e90ff] text-[20px]">
                                                     <FontAwesomeIcon icon={item.icon} />
@@ -234,7 +257,7 @@ export default function AddExpense() {
                                 </div>
                             </div>
                             <div className="w-full border-b-2 border-gray-600"></div>
-                            <div className="w-full flex flex-row justify-end items-center gap-4 mt-2">
+                            <div className="w-full flex flex-row justify-end items-center gap-4 mt-2 mb-2">
                                 <button className="text-gray-400 px-3 py-2 text-[12px] rounded-[5px] border-solid border-gray-400 border hover:text-[#1e90ff] hover:cursor-pointer hover:border-[#0d7ae9]">Cancel</button>
                                 <button className="bg-[#1e90ff] text-white px-3 py-2 text-[12px] rounded-[5px] hover:bg-[#0d7ae9] hover:cursor-pointer" onClick={addExpense}><FontAwesomeIcon icon={faPlus} /> Add Expense</button>
                             </div>
