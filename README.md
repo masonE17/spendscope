@@ -1,6 +1,8 @@
 # SpendScope
 - Zoom in on your spending.
 - SpendScope is a full-stack expense tracker built with React and Vite. Add, categorize, and manage your expenses, then visualize your spending with interactive charts, which is all backed by Supabase.
+
+🔗 **Check it out live on Vercel: [spendscope-seven.vercel.app](https://spendscope-seven.vercel.app/)**
   
 ## Features
 - **Auth** — sign up or log in with secure authentication and row-level security
@@ -14,6 +16,7 @@
 - [Recharts](https://recharts.org/) — data visualization
 - [Supabase](https://supabase.com/) — auth, database (Postgres), and row-level security
 - [Tailwind CSS](https://tailwindcss.com/) — styling
+- [Vercel](https://vercel.com/) — hosting and deployment
 </br>
 </br>
 <img src="src/assets/SpendScope_Logo.png" width="300">
