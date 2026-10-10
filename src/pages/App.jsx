@@ -10,6 +10,7 @@ import { faLinkedin } from '@fortawesome/free-brands-svg-icons';
 import { faGithub } from '@fortawesome/free-brands-svg-icons';
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import logo from '../assets/SpendScope_Logo.png';
 import { supabase } from "../lib/supabaseClient";
 
 function HomeDetails({ fWord, lWord, icon }) {
@@ -166,7 +167,7 @@ export default function App() {
             </div>
           </div>
           <div className="max-w-120">
-            <img src="src/assets/SpendScope_Logo.png" alt="SpendScope Logo" className="w-full rounded-full" />
+            <img src={logo} alt="SpendScope Logo" className="w-full rounded-full" />
           </div>
           <div className="max-w-90 h-full flex flex-col justify-center items-center">
             <div className="border-solid border-gray-600 border p-4 bg-[rgb(5,21,49)] rounded-[5px] flex flex-col justify-center items-center">

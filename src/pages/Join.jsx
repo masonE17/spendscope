@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { supabase } from "../lib/supabaseClient";
 import { useNavigate } from "react-router-dom";
+import logo from "../assets/SpendScope_Logo.png";
 
 export default function Join() {
     const [signIn, setSignIn] = useState(true);
@@ -61,7 +62,7 @@ export default function Join() {
                     </div>
                 )}
                 <div>
-                    <img src="src/assets/SpendScope_Logo.png" alt="logo" className="w-60 h-60 rounded-full" />
+                    <img src={logo} alt="logo" className="w-60 h-60 rounded-full" />
                 </div>
                 {signIn ? (
                     <>
