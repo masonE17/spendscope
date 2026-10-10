@@ -109,12 +109,15 @@ export default function AddExpense() {
         }
         if (!amount || isNaN(amount)) {
             setIsAmountError(true);
+            setAmount("");
         }
-        if (!location) {
+        if (!location || !isNaN(location)) {
             setIsLocationError(true);
+            setLocation("");
         }
         if (!category) {
             setIsCategoryError(true);
+            setCategory("");
         }
         isSubmitting.current = true;
         const { error } = await supabase.from('expenses').insert([{ amount: amount, location: location, category: category },]).select()
@@ -143,6 +146,15 @@ export default function AddExpense() {
             console.log(error.message);
         }
         navigate("/");
+    }
+
+    function closedAddExpense() {
+        setAmount("");
+        setLocation("");
+        setCategory("");
+        setIsAmountError(false);
+        setIsLocationError(false);
+        setIsCategoryError(false);
     }
 
     return (
@@ -258,7 +270,7 @@ export default function AddExpense() {
                             </div>
                             <div className="w-full border-b-2 border-gray-600"></div>
                             <div className="w-full flex flex-row justify-end items-center gap-4 mt-2 mb-2">
-                                <button className="text-gray-400 px-3 py-2 text-[12px] rounded-[5px] border-solid border-gray-400 border hover:text-[#1e90ff] hover:cursor-pointer hover:border-[#0d7ae9]">Cancel</button>
+                                <button className="text-gray-400 px-3 py-2 text-[12px] rounded-[5px] border-solid border-gray-400 border hover:text-[#1e90ff] hover:cursor-pointer hover:border-[#0d7ae9]" onClick={closedAddExpense}>Cancel</button>
                                 <button className="bg-[#1e90ff] text-white px-3 py-2 text-[12px] rounded-[5px] hover:bg-[#0d7ae9] hover:cursor-pointer" onClick={addExpense}><FontAwesomeIcon icon={faPlus} /> Add Expense</button>
                             </div>
                         </div>
