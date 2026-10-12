@@ -193,7 +193,7 @@ export default function App() {
           <div className="max-w-200 m-auto flex flex-row justify-center items-center gap-28 p-4">
             <div className="w-70 h-70 border-solid border-gray-600 border p-4 bg-[rgb(5,21,49)] rounded-[5px] flex flex-col justify-center items-center gap-3">
               <PricingDetails plan="Free" price="$0" longevity="forever" description="Basic expense tracking" includedFeatures={["Manual Creation", "Unlimited Plans"]} unincludedFeatures={["No Premium Upcoming Features"]} />
-              <Link to="/join">
+              <Link to={isSignedIn ? "/dashboard" : "/join"}>
                 <button className="bg-[#1e90ff] text-white p-2 text-[12px] rounded-[5px] hover:bg-[#0d7ae9] hover:cursor-pointer">Get Started Free</button>
               </Link>
             </div>
