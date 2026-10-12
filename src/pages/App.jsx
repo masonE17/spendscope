@@ -95,7 +95,7 @@ export default function App() {
               <div className="w-full border-b-2 border-transparent group-hover:border-[#1e90ff] rounded-[5px]"></div>
             </div>
           </div>
-          <Link to="/join" className="justify-self-end">
+          <Link to={isSignedIn ? "/dashboard" : "/join"} className="justify-self-end">
             <button className="bg-[#1e90ff] text-white p-2 text-[12px] rounded-[5px] hover:bg-[#0d7ae9] hover:cursor-pointer">Get Started Free</button>
           </Link>
         </div>
@@ -114,7 +114,7 @@ export default function App() {
               <p className="text-white text-[42px] font-bold -mt-4">Ever Need</p>
               <div className="flex flex-col justify-center items-center gap-7">
                 <p className="text-gray-400 text-[14px] text-center mt-6">Build optimal expense management strategies with our <br />intuitive platform.</p>
-                <Link to="/join">
+                <Link to={isSignedIn ? "/dashboard" : "/join"}>
                   <button className="bg-[#1e90ff] text-white px-4 py-3 text-[16px] rounded-[5px] animate-pulse hover:bg-[#0d7ae9] hover:cursor-pointer">Get Started Free</button>
                 </Link>
               </div>
@@ -212,7 +212,7 @@ export default function App() {
           <p className="text-gray-400 text-[14px] text-center mb-8">Start your journey to financial freedom today.</p>
           <div className="w-full max-w-200 m-auto">
             <div className="flex flex-row justify-center items-center gap-4 mb-8">
-              <Link to="/join">
+              <Link to={isSignedIn ? "/dashboard" : "/join"}>
                 <button className="bg-[#1e90ff] text-white p-2 text-[12px] rounded-[5px] hover:bg-[#0d7ae9] hover:cursor-pointer">Get Started Free</button>
               </Link>
               <Link to={isSignedIn ? "/dashboard" : "/join"}>
